@@ -2,10 +2,11 @@
 Парсер для файлов next-API платформы Checkio
 '''
 from os import walk
+from googletrans import Translator
 
 
 directory_name = 'C:\\Users\\Infotech_5\\OneDrive\\Документы\\GitHub'  # Всавить путь к папке мисси
-mission_name = 'checkio-mission-cut-sentence'  # Всавить название миссии
+mission_name = 'checkio-mission-bigger-price'  # Всавить название миссии
 
 
 def example_cutter(exmpl):  # Функция для обрезки экзампла в файле js_node.tmpl
@@ -22,15 +23,18 @@ def example_cutter(exmpl):  # Функция для обрезки экзамп�
 def task_desc_change(path):  # Функция для изменения строчек теста в такс-дискрипте на новую строку next-API
     task_descrption = open(f'{path}', mode='r', encoding='utf-8')
     lines = task_descrption.readlines()
+
     if_str = ['<pre class="brush: {% if is_js %}javascript{% else %}python{% endif %}">{{init_code_tmpl}}</pre>\n']
-    task_start = 0
-    task_end = 0
-    for i in range(len(lines)):  # Определяем границы искомого куска кода по "ключевым" меткам '{% if' и '{% endif'
-        if lines[i].startswith('{% if'):
-            task_start = i
-        elif lines[i].startswith('{% endif'):
-            task_end = i
-    lines[task_start:task_end+1] = if_str  # Заменяем ненужный кусок на актуальный код
+    if ''.join(if_str) not in lines:
+        print(lines)
+        task_start = 0
+        task_end = 0
+        for i in range(len(lines)):  # Определяем границы искомого куска кода по "ключевым" меткам '{% if' и '{% endif'
+            if lines[i].startswith('{% if'):
+                task_start = i
+            elif lines[i].startswith('{% endif'):
+                task_end = i
+        lines[task_start:task_end+1] = if_str  # Заменяем ненужный кусок на актуальный код
     task_descrption.close()
     task_descrption = open(rf'{path}', mode='w', encoding='utf-8')
     task_descrption.write(''.join(lines))  # Заново открытый файл перетираем корректным кодом
@@ -125,27 +129,14 @@ for i in range(len(js_node_readLines)):
         js_func_name = js_node_readLines[i][9:js_bracket]
     elif js_node_readLines[i].startswith("}"):
         js_b = i + 1  # Конец initial кода функции
-    elif js_node_readLines[i].startswith("assert"):  # Начало кода console.log(func(...))
+    elif js_node_readLines[i].strip().startswith("assert"):  # Начало кода console.log(func(...))
         if js_count == 1:  # На втором кругу попадаем сюда, получаем конец первого примера и выходим из цикла
             js_d = i
-            js_ex = ''.join(js_node_readLines[js_c:js_d])[13:]
+            js_ex = ''.join(js_node_readLines[js_c:js_d])[js_node_readLines[i].find('ual(') + 4:]
             break
         js_c = i  # Начало кода из первого примера
         js_count += 1
-    elif js_node_readLines[i].startswith("    assert.equal"):  # Начало кода console.log(func(...)), с другим маркером
-        if js_count == 1:  # На втором кругу попадаем сюда, получаем конец первого примера и выходим из цикла
-            js_d = i
-            js_ex = ''.join(js_node_readLines[js_c:js_d])[17:]
-            break
-        js_c = i  # Начало кода из первого примера
-        js_count += 1
-    elif js_node_readLines[i].startswith("    assert.deepEqual"):  # Начало кода console.log(func(...)), с другим маркером
-        if js_count == 1:  # На втором кругу попадаем сюда, получаем конец первого примера и выходим из цикла
-            js_d = i
-            js_ex = ''.join(js_node_readLines[js_c:js_d])[21:]
-            break
-        js_c = i  # Начало кода из первого примера
-        js_count += 1
+
 
 js_func_str = ''.join(js_node_readLines[js_a:js_b])
 # Так как со стройкой екзампла в джаве есть трудность (в большом количестве запятых еще до самого екзампла), реализовал обрезку функцией
@@ -200,3 +191,32 @@ for i in walking:
             if u.startswith('task_description.html'):  # Берем нужный нам файл и крепим к директории
                 path_info = i[0] + '\\' + u
                 task_desc_change(path_info)  # Вызываем функцию передавая ей каждый раз новый путь для изменений
+
+
+text_1 = walk(f'{directory_name}\\{mission_name}\\hints')
+text_2 = open(f"{directory_name}\\{mission_name}\\hints\\{list(text_1)[0][2][0]}", 'r')
+texts = text_2.read()
+new_text = ''''''
+trns = Translator()
+
+for i in texts.split('\n'):
+    if i.strip().startswith('<'):
+        continue
+    else:
+        new_text += i + '\n'
+
+text_2.close()
+print('HINTS:\n', trns.translate(new_text, src='en', dest='uk').text)
+
+task_desc_trns = open(f"{directory_name}\\{mission_name}\\info\\task_description.html", 'r')
+task_2 = task_desc_trns.read()
+new_text = ''''''
+
+for i in task_2.split('\n'):
+    if i.strip().startswith('<'):
+        continue
+    else:
+        new_text += i + '\n'
+
+task_desc_trns.close()
+print('-'*200, '\nTASK:\n', trns.translate(new_text, src='en', dest='uk').text)
