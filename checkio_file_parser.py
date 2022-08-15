@@ -46,12 +46,13 @@ def task_desc_change(path):  # Функция для изменения стро
 # Парсинг файла init.js
 # Просто перетираем файл на новый код
 init_js = open(f"{directory_name}\\{mission_name}\\editor\\animation\\init.js", 'w')
-init_js.write(r'''requirejs(['ext_editor_io2', 'jquery_190'],
+init_js.write('''requirejs(['ext_editor_io2', 'jquery_190'],
     function (extIO, $) {
         var io = new extIO({});
         io.start();
     }
-);''')
+);
+''')
 init_js.close()
 print('\033init.js - OK')
 
@@ -93,10 +94,28 @@ func_str = ''.join(python_3_readLines[a:b])
 example_str = ''.join(python_3_readLines[c:d])[11:]+end if d != 0 else ''.join(end)[11:]
 
 # Текст заполняемый в новый файл
-python_3_tmpl.write('{% comment %}New initial code template{% endcomment %}\n{% block env %}' + imp_str[:-1] + '{% endblock env %}\n\n{% block start %}\n'
-                    + func_str + "{% endblock start %}\n\n{% block example %}\nprint('Example:')\nprint(" + example_str
-                    + ')\n{% endblock %}\n\n{% block tests %}\n{% for t in tests %}\nassert {% block call %}' + func_name
-                    + "({{t.input|p_args}})\n{% endblock %} == {% block result %}{{t.answer|p}}{% endblock %}{% endfor %}\n{% endblock %}\n\n{% block final %}\n" + 'print("The mission is done! Click \'Check Solution\' to earn rewards!")\n{% endblock final %}\n')
+python_3_tmpl.write('''{% comment %}New initial code template{% endcomment %}
+{% block env %}''' + imp_str[:-1] + '''{% endblock env %}
+
+{% block start %}
+''' + func_str +
+"""{% endblock start %}
+
+{% block example %}
+print('Example:')
+print(""" + example_str + ''')
+{% endblock %}
+
+{% block tests %}
+{% for t in tests %}
+assert {% block call %}''' + func_name + '''({{t.input|p_args}})
+{% endblock %} == {% block result %}{{t.answer|p}}{% endblock %}{% endfor %}
+{% endblock %}
+
+{% block final %}
+print("The mission is done! Click \'Check Solution\' to earn rewards!")
+{% endblock final %}
+''')
 
 python_3_tmpl.close()
 python_3.close()
@@ -142,10 +161,28 @@ js_func_str = ''.join(js_node_readLines[js_a:js_b])
 # Так как со стройкой екзампла в джаве есть трудность (в большом количестве запятых еще до самого екзампла), реализовал обрезку функцией
 js_example_str = example_cutter(js_ex) if js_d != 0 else example_cutter(''.join(js_node_readLines[js_c])[13:])
 
-js_node_tmpl.write('{% comment %}New initial code template{% endcomment %}\n{% block env %}import assert from "assert";'+ js_imp_str[:-1] +'{% endblock env %}\n\n{% block start %}\n'
-                   + js_func_str + "{% endblock start %}\n\n{% block example %}\nconsole.log('Example:');\nconsole.log(" + js_example_str + '{% endblock %}\n\n// These "asserts" are used for self-checking\n{% block tests %}\n{% for t in tests %}'
-                   + '\nassert.strictEqual({% block call %}' + js_func_name + '({{t.input|j_args}})\n{% endblock %}, {% block result %}{{t.answer|j}}{% endblock %});{% endfor %}\n'
-                   + '{% endblock %}\n\n{% block final %}\nconsole.log("Coding complete? Click \'Check Solution\' to earn rewards!");\n{% endblock final %}')
+js_node_tmpl.write('''{% comment %}New initial code template{% endcomment %}
+{% block env %}import assert from "assert";'''+ js_imp_str[:-1] +'''{% endblock env %}
+
+{% block start %}
+''' + js_func_str +
+"""{% endblock start %}
+
+{% block example %}
+console.log('Example:');
+console.log(""" + js_example_str +
+'''{% endblock %}
+
+// These "asserts" are used for self-checking
+{% block tests %}
+{% for t in tests %}
+assert.strictEqual({% block call %}''' + js_func_name +
+'''({{t.input|j_args}})
+{% endblock %}, {% block result %}{{t.answer|j}}{% endblock %});{% endfor %}
+{% endblock %}
+
+{% block final %}
+console.log("Coding complete? Click \'Check Solution\' to earn rewards!");\n{% endblock final %}''')
 
 js_node_tmpl.close()
 js_node.close()
@@ -158,6 +195,7 @@ referee_py = open(f"{directory_name}\\{mission_name}\\verification\\referee.py",
 referee_py.write('''from checkio.signals import ON_CONNECT
 from checkio import api
 from checkio.referees.io_template import CheckiOReferee
+# from checkio.referees.checkers import to_list
 
 from tests import TESTS
 
@@ -165,6 +203,7 @@ api.add_listener(
     ON_CONNECT,
     CheckiOReferee(
         tests=TESTS,
+        # checker=to_list,
         function_name={
             "python":"''' + func_name + '''",
             "js": "''' + js_func_name + '''"
