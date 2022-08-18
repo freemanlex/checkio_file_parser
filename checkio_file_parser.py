@@ -32,7 +32,7 @@ def task_desc_change(path):  # Функция для изменения стро
                 task_start = ind
             elif line.startswith('{% endif'):
                 task_end = ind
-        lines[task_start:task_end+1] = if_str  # Заменяем ненужный кусок на актуальный код
+        lines[task_start : task_end + 1] = if_str  # Заменяем ненужный кусок на актуальный код
     task_description.close()
     task_description = open(rf'{path}', mode='w', encoding='utf-8')
     task_description.write(''.join(lines))  # Заново открытый файл перетираем корректным кодом
@@ -77,27 +77,27 @@ for ind, line in enumerate(python_3_readLines):
         a = ind
         bracket = line.index('(')   # Начало initial кода функции
         bracket2 = line.index(')')
-        func_name = line[4:bracket]
-        init_string = line[bracket + 1: bracket2]
+        func_name = line[4 : bracket]
+        init_string = line[bracket + 1 : bracket2]
     elif line.startswith('if'):
         b = ind  # Конец initial кода функции
     elif line.startswith('    assert'):
         c = ind  # Начало кода в print(func(...))
         if '==' in line:
-            end = line[:line.index(' ==')]
+            end = line[ : line.index(' ==')]
             break
     elif '==' in line:
         d = ind  # Конец кода в print(func(...))
-        end = line[:line.index(' ==')]  # Отрезать часть "ожидаемый" ответ
+        end = line[ : line.index(' ==')]  # Отрезать часть "ожидаемый" ответ
         break  # Примеров может быть много, чтобы забрать самый первый пример, мы выходим на данном моменте из цикла
 
-func_str = ''.join(python_3_readLines[a:b])
-example_str = ''.join(python_3_readLines[c:d])[11:]+end if d != 0 else ''.join(end)[11:]
+func_str = ''.join(python_3_readLines[a : b])
+example_str = ''.join(python_3_readLines[c : d])[11 : ]+end if d != 0 else ''.join(end)[11 : ]
 
 # Текст заполняемый в новый файл
 python_3_tmpl.write(
 '''{% comment %}New initial code template{% endcomment %}
-{% block env %}''' + imp_str[:-1] + '''{% endblock env %}
+{% block env %}''' + imp_str[ : -1] + '''{% endblock env %}
 
 {% block start %}''' 
 + func_str +
@@ -148,25 +148,25 @@ for ind, line in enumerate(js_node_readLines):
     elif line.startswith('function'):
         js_a = ind
         js_bracket = line.index('(')   # Начало initial кода функции
-        js_func_name = line[9:js_bracket]
+        js_func_name = line[9 : js_bracket]
     elif line.startswith("}"):
         js_b = ind + 1  # Конец initial кода функции
     elif line.strip().startswith("assert"):  # Начало кода console.log(func(...))
         if js_count == 1:  # На втором кругу попадаем сюда, получаем конец первого примера и выходим из цикла
             js_d = ind
-            js_ex = ''.join(js_node_readLines[js_c:js_d])[line.find('ual(') + 4:]
+            js_ex = ''.join(js_node_readLines[js_c : js_d])[line.find('ual(') + 4 : ]
             break
         js_c = ind  # Начало кода из первого примера
         js_count += 1
 
 
-js_func_str = ''.join(js_node_readLines[js_a:js_b])
+js_func_str = ''.join(js_node_readLines[js_a : js_b])
 # Так как со стройкой екзампла в джаве есть трудность (в большом количестве запятых еще до самого екзампла), реализовал обрезку функцией
-js_example_str = example_cutter(js_ex) if js_d != 0 else example_cutter(''.join(js_node_readLines[js_c])[13:])
+js_example_str = example_cutter(js_ex) if js_d != 0 else example_cutter(''.join(js_node_readLines[js_c])[13 : ])
 
 js_node_tmpl.write(
 '''{% comment %}New initial code template{% endcomment %}
-{% block env %}import assert from "assert";'''+ js_imp_str[:-1] +'''{% endblock env %}
+{% block env %}import assert from "assert";'''+ js_imp_str[ : -1] +'''{% endblock env %}
 
 {% block start %}'''
 + js_func_str +
@@ -271,13 +271,15 @@ test_py = open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'r')
 test_py_readlines = test_py.readlines()
 for ind, line in enumerate(test_py_readlines):
     if line.startswith("TESTS ="):
-        tests_dict = eval(''.join(test_py_readlines[ind:])[8:])
+        tests_dict = eval(''.join(test_py_readlines[ind : ])[8 : ])
         break
 
 
 print(tests_dict)
 print()
 print(init_string)
-# for category in tests_dict.values():
-#     for dictionary in category:
-#         dictionary['input'] = 'hello'
+for category in tests_dict.values():
+    for dictionary in category:
+        inp = dictionary['input']
+        if len(inp) > 1:
+            dictionary['input'] = [inp]
