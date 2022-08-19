@@ -39,7 +39,31 @@ def task_desc_change(path):  # Функция для изменения стро
     task_description.close()
     print(f'{path} - OK')
 
+# parsing function arguments
+def args_parse(line: str) -> dict:
 
+    # replacing commas inside typehints with '.', commas between args with '*'
+    cache = ''
+    for char in line:
+        if char == '[':
+            cache += char
+        elif char == ']':
+            cache = cache[:-1]
+        elif char == ',':
+            line = line.replace(',', ('.', '*')[not cache], 1)
+    # replacing '.' inside typehints back to ','
+    line = line.replace('.', ',')
+    # creating dict with name of args and if present - typehint and default value
+    final_dict = {}
+    for arg in map(str.strip, line.split('*')):
+        val = typehint = None
+        if '=' in arg:
+            arg, val = list(map(str.strip, arg.split('=')))
+        if ':' in arg:
+            arg, typehint = list(map(str.strip, arg.split(':')))
+        final_dict[arg] = typehint, val
+
+    return final_dict
 
 # Парсинг файла init.js
 # Просто перетираем файл на новый код
