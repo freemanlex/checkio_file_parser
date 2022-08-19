@@ -1,7 +1,7 @@
 '''
 Парсер для файлов next-API платформы Checkio
 '''
-from os import walk as walk, remove as remove
+import os
 # from googletrans import Translator
 
 
@@ -121,7 +121,7 @@ print("The mission is done! Click \'Check Solution\' to earn rewards!")
 
 python_3_tmpl.close()
 python_3.close()
-remove(f"{directory_name}\\{mission_name}\\editor\\initial_code\\python_3")
+os.remove(f"{directory_name}\\{mission_name}\\editor\\initial_code\\python_3")
 print('python_3.tmpl - OK')
 
 
@@ -189,7 +189,7 @@ console.log("Coding complete? Click \'Check Solution\' to earn rewards!");\n{% e
 
 js_node_tmpl.close()
 js_node.close()
-remove(f"{directory_name}\\{mission_name}\\editor\\initial_code\\js_node")
+os.remove(f"{directory_name}\\{mission_name}\\editor\\initial_code\\js_node")
 print('js_node.tmpl - OK')
 
 
@@ -227,7 +227,7 @@ print('referee.py - OK')
 
 # Парсинг файла task_description.html
 # Используем библиотеку "os" и находим все файлы таск-дискрипта. Используя функцию task_desc_change, изменяем эти файлы
-walking = walk(f'{directory_name}\\{mission_name}')
+walking = os.walk(f'{directory_name}\\{mission_name}')
 path_info = ''
 for i in walking:
     if 'task_description.html' in i[2]:  # Находим по директориям где есть нужный нам файл
@@ -237,7 +237,7 @@ for i in walking:
                 task_desc_change(path_info)  # Вызываем функцию передавая ей каждый раз новый путь для изменений
 
 
-# text_1 = walk(f'{directory_name}\\{mission_name}\\hints')
+# text_1 = os.walk(f'{directory_name}\\{mission_name}\\hints')
 # text_2 = open(f"{directory_name}\\{mission_name}\\hints\\{list(text_1)[0][2][0]}", 'r')
 # texts = text_2.read()
 # new_text = ''''''
@@ -262,7 +262,7 @@ for i in walking:
 #     else:
 #         new_text += i + '\n'
 
-# task_desc_trns.close()
+# task_desc_trns.close() 
 # print('-'*200, '\nTASK:\n', trns.translate(new_text, src='en', dest='uk').text)
 
 
@@ -283,3 +283,19 @@ for category in tests_dict.values():
         inp = dictionary['input']
         if len(inp) > 1:
             dictionary['input'] = [inp]
+
+# create uk
+path_uk = f"{directory_name}\\{mission_name}\\translations\\uk\\info"
+if not os.path.exists(path_uk):
+    os.makedirs(path_uk)
+    descr = open(f"{directory_name}\\{mission_name}\\info\\task_description.html", 'r')
+    descr_uk = open(path_uk + "\\task_description.html", 'w')
+    descr_uk.write(descr.read())
+    descr.close()
+    descr_uk.close()
+if not os.path.exists(path_uk + "\\task_short_description.html"):
+    descr = open(f"{directory_name}\\{mission_name}\\info\\task_short_description.html", 'r')
+    descr_uk = open(path_uk + "\\task_short_description.html", 'w')
+    descr_uk.write(descr.read())
+    descr.close()
+    descr_uk.close()
