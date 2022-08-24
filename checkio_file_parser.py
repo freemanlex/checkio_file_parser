@@ -1,12 +1,12 @@
 '''
 Парсер для файлов next-API платформы Checkio
 '''
-import os
+import os, json, re
 # from googletrans import Translator
 
 
 directory_name = 'C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub'  # Вставить путь к папке миссии
-mission_name = 'checkio-mission-create-zigzag-array'  # Вставить название миссии
+mission_name = 'checkio-task-digits-multiplication'  # Вставить название миссии
 
 
 def example_cutter(exmpl):  # Функция для обрезки экзампла в файле js_node.tmpl
@@ -23,21 +23,26 @@ def example_cutter(exmpl):  # Функция для обрезки экзамп�
 def task_desc_change(path):  # Функция для изменения строчек теста в такс-дискрипте на новую строку next-API
     task_description = open(f'{path}', mode='r', encoding='utf-8')
     lines = task_description.readlines()
-
     if_str = '<pre class="brush: {% if is_js %}javascript{% else %}python{% endif %}">{{init_code_tmpl}}</pre>\n'
     if if_str not in lines:
-        task_start = task_end = 0
-        for ind, line in enumerate(lines):  # Определяем границы искомого куска кода по "ключевым" меткам '{% if' и '{% endif'
-            if line.startswith('{% if'):
+        task_start = task_end = ex = 0
+        for ind, line in enumerate(lines):
+            if "Example" in line:
+                ex = ind
+                  # Определяем границы искомого куска кода по "ключевым" меткам '{% if' и '{% endif'
+            elif ind > ex and '{% if interpreter.slug' in line:
                 task_start = ind
-            elif line.startswith('{% endif'):
+            elif ind > task_start and '{% endif' in line:
                 task_end = ind
-        lines[task_start : task_end + 1] = if_str  # Заменяем ненужный кусок на актуальный код
+        lines[task_start: task_end + 1] = if_str  # Заменяем ненужный кусок на актуальный код
     task_description.close()
     task_description = open(rf'{path}', mode='w', encoding='utf-8')
     task_description.write(''.join(lines))  # Заново открытый файл перетираем корректным кодом
     task_description.close()
-    print(f'{path} - OK')
+    index = path.find("\\translations")
+    if index == -1:
+        index = path.find("\\info")
+    print(f'{path[index:]} - OK')
 
 # parsing function arguments
 def args_parse(line: str) -> dict:
@@ -77,7 +82,7 @@ init_js.write(
 );
 ''')
 init_js.close()
-print('init.js - OK')
+print("\\editor\\animation\\init.js - OK")
 
 # Парсинг файла python_3.tmpl
 python_3_tmpl = open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\python_3.tmpl", 'w')
@@ -145,8 +150,7 @@ print("The mission is done! Click \'Check Solution\' to earn rewards!")
 
 python_3_tmpl.close()
 python_3.close()
-os.remove(f"{directory_name}\\{mission_name}\\editor\\initial_code\\python_3")
-print('python_3.tmpl - OK')
+print("\\editor\\initial_code\\python_3.tmpl - OK")
 
 
 # Парсинг файла js_node.tmpl
@@ -213,50 +217,23 @@ console.log("Coding complete? Click \'Check Solution\' to earn rewards!");\n{% e
 
 js_node_tmpl.close()
 js_node.close()
-os.remove(f"{directory_name}\\{mission_name}\\editor\\initial_code\\js_node")
-print('js_node.tmpl - OK')
+print("\\editor\\initial_code\\js_node.tmpl - OK")
 
-
-# Парсинг файла referee.py
-# Имена функций мы уже получили в двух переменных выше "func_name" для пайтона и "js_func_name" для джавы
-referee_py = open(f"{directory_name}\\{mission_name}\\verification\\referee.py", 'w')
-referee_py.write(
-'''from checkio.signals import ON_CONNECT
-from checkio import api
-from checkio.referees.io_template import CheckiOReferee
-# from checkio.referees.checkers import to_list
-
-from tests import TESTS
-
-api.add_listener(
-    ON_CONNECT,
-    CheckiOReferee(
-        tests=TESTS,
-        # checker=to_list,
-        function_name={
-            "python":"''' + func_name + '''",
-            "js": "''' + js_func_name + '''"
-        },
-        cover_code={
-            'python-3': {},
-            'js-node': {
-                # "dateForZeros": True,
-            }
-        }
-    ).on_ready)\n''')
-
-referee_py.close()
-print('referee.py - OK')
-
+# old init files deleting
+files_to_del = ("js_node", "python_3","python_27")
+for file in files_to_del:
+    try:
+        os.remove(f"{directory_name}\\{mission_name}\\editor\\initial_code\\" + file)
+    except:
+        pass
 
 # Парсинг файла task_description.html
 # Используем библиотеку "os" и находим все файлы таск-дискрипта. Используя функцию task_desc_change, изменяем эти файлы
 walking = os.walk(f'{directory_name}\\{mission_name}')
-path_info = ''
 for i in walking:
     if 'task_description.html' in i[2]:  # Находим по директориям где есть нужный нам файл
         for u in i[2]:
-            if u.startswith('task_description.html'):  # Берем нужный нам файл и крепим к директории
+            if u == 'task_description.html':  # Берем нужный нам файл и крепим к директории
                 path_info = i[0] + '\\' + u
                 task_desc_change(path_info)  # Вызываем функцию передавая ей каждый раз новый путь для изменений
 
@@ -290,6 +267,37 @@ for i in walking:
 # print('-'*200, '\nTASK:\n', trns.translate(new_text, src='en', dest='uk').text)
 
 
+# Парсинг файла referee.py
+# Имена функций мы уже получили в двух переменных выше "func_name" для пайтона и "js_func_name" для джавы
+referee_py = open(f"{directory_name}\\{mission_name}\\verification\\referee.py", 'w')
+referee_py.write(
+'''from checkio.signals import ON_CONNECT
+from checkio import api
+from checkio.referees.io_template import CheckiOReferee
+# from checkio.referees.checkers import to_list
+
+from tests import TESTS
+
+api.add_listener(
+    ON_CONNECT,
+    CheckiOReferee(
+        tests=TESTS,
+        # checker=to_list,
+        function_name={
+            "python":"''' + func_name + '''",
+            "js": "''' + js_func_name + '''"
+        },
+        cover_code={
+            'python-3': {},
+            'js-node': {
+                # "dateForZeros": True,
+            }
+        }
+    ).on_ready)\n''')
+
+referee_py.close()
+print("\\verification\\referee.py - OK")
+
 # parsing tests
 test_py = open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'r')
 test_py_readlines = test_py.readlines()
@@ -298,15 +306,27 @@ for ind, line in enumerate(test_py_readlines):
         tests_dict = eval(''.join(test_py_readlines[ind : ])[8 : ])
         break
 
-
-print(tests_dict)
-print()
-print(init_string)
+#print(init_string)
 for category in tests_dict.values():
     for dictionary in category:
         inp = dictionary['input']
-        if len(inp) > 1:
+        if type(inp) != list:
             dictionary['input'] = [inp]
+tests_dict = json.dumps(tests_dict, indent=4)
+tests_dict = re.sub('\"input\": [\n[ ]{18}', '\"input\": [', tests_dict)
+tests_dict = re.sub('\n[ ]{12}]', ']', tests_dict)
+test_py = open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'w')
+test_py.write(
+'''\"\"\"
+TESTS is a dict with all you tests.
+Keys for this will be categories' names.
+Each test is dict with
+    "input" -- input data for user function
+    "answer" -- your right answer
+    "explanation" -- not necessary key, it's using for additional info in animation.
+\"\"\"
+
+TESTS = ''' + tests_dict)
 
 # create uk
 path_uk = f"{directory_name}\\{mission_name}\\translations\\uk\\info"
