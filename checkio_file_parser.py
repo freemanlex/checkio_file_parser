@@ -66,6 +66,9 @@ def args_parse(line: str) -> dict:
             arg, val = list(map(str.strip, arg.split('=')))
         if ':' in arg:
             arg, typehint = list(map(str.strip, arg.split(':')))
+            ind = typehint.find('[')
+            if ind != -1:
+                typehint = typehint[:ind], typehint[ind: -1]
         final_dict[arg] = typehint, val
 
     return final_dict
@@ -343,3 +346,5 @@ if not os.path.exists(path_uk + "\\task_short_description.html"):
     descr_uk.write(descr.read())
     descr.close()
     descr_uk.close()
+
+print(args_parse('data: list[int] = [1, 2]'))
