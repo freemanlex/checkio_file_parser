@@ -4,12 +4,13 @@
 import os, json, re
 # from googletrans import Translator
 
+# Вставить путь к папке миссии
+directory_name = 'C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub'
+# Вставить название миссии
+mission_name = 'checkio-mission-acceptable-password-2'  
 
-directory_name = 'C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub'  # Вставить путь к папке миссии
-mission_name = 'checkio-task-digits-multiplication'  # Вставить название миссии
-
-
-def example_cutter(exmpl):  # Функция для обрезки экзампла в файле js_node.tmpl
+# Функция для обрезки экзампла в файле js_node.tmpl
+def example_cutter(exmpl):  
     js_fin = exmpl
     js_ex_reverse = js_fin[::-1]  # Переворачивается пример, для удобной обрезки по "ключевой" метке
     for i in range(len(js_ex_reverse)):
@@ -19,8 +20,8 @@ def example_cutter(exmpl):  # Функция для обрезки экзамп�
             break
     return js_fin  # Возврат отредактированного куска
 
-
-def task_desc_change(path):  # Функция для изменения строчек теста в такс-дискрипте на новую строку next-API
+# Функция для изменения строчек теста в такс-дискрипте на новую строку next-API
+def task_desc_change(path):  
     task_description = open(f'{path}', mode='r', encoding='utf-8')
     lines = task_description.readlines()
     if_str = '<pre class="brush: {% if is_js %}javascript{% else %}python{% endif %}">{{init_code_tmpl}}</pre>\n'
@@ -66,17 +67,25 @@ def args_parse(line: str) -> dict:
             arg, val = list(map(str.strip, arg.split('=')))
         if ':' in arg:
             arg, typehint = list(map(str.strip, arg.split(':')))
-            ind = typehint.find('[')
-            if ind != -1:
-                typehint = typehint[:ind], typehint[ind: -1]
         final_dict[arg] = typehint, val
 
     return final_dict
 
+# getting function names
+referee_py = open(f"{directory_name}\\{mission_name}\\verification\\referee.py", 'r')
+for line in referee_py.readlines():
+    if line.lstrip().startswith("\"python"):
+        func_name = line.split(":")[1].strip()[1:-2]
+    elif line.lstrip().startswith("\"js"):
+        js_func_name = line.split(":")[1].strip()[1:-1]
+        break
+referee_py.close()
+
 # Парсинг файла init.js
 # Просто перетираем файл на новый код
-init_js = open(f"{directory_name}\\{mission_name}\\editor\\animation\\init.js", 'w')
-init_js.write(
+try:
+    init_js = open(f"{directory_name}\\{mission_name}\\editor\\animation\\init.js", 'w')
+    init_js.write(
 '''requirejs(['ext_editor_io2', 'jquery_190'],
     function (extIO, $) {
         var io = new extIO({});
@@ -84,11 +93,13 @@ init_js.write(
     }
 );
 ''')
-init_js.close()
-print("\\editor\\animation\\init.js - OK")
+except: print("init.js - PROBLEM!!")
+else: print("\\editor\\animation\\init.js - OK")
+finally: init_js.close()
+
 
 # Парсинг файла python_3.tmpl
-python_3_tmpl = open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\python_3.tmpl", 'w')
+
 python_3 = open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\python_3", 'r')
 python_3_readLines = python_3.readlines()
 
@@ -100,20 +111,16 @@ example_str = ''  # Строка, в которой будет хранитьс�
 end = ''
 c = 0
 d = 0  # Markers for 'assert' search
-func_name = ''  # Название функции для вставки в код
 
 for ind, line in enumerate(python_3_readLines):
     if line.startswith('from') or line.startswith('import'):
-        imp_str += line  # Ищем по тексту импортированные библиотеки
+        imp_str += line.strip()  # Ищем по тексту импортированные библиотеки
     elif line.startswith('def'):
         a = ind
-        bracket = line.index('(')   # Начало initial кода функции
-        bracket2 = line.index(')')
-        func_name = line[4 : bracket]
-        init_string = line[bracket + 1 : bracket2]
-    elif line.startswith('if'):
+        init_string = line[line.index('(') + 1: line.index(')')]
+    elif line.lstrip().startswith('return'):
         b = ind  # Конец initial кода функции
-    elif line.startswith('    assert'):
+    elif line.lstrip().startswith('assert'):
         c = ind  # Начало кода в print(func(...))
         if '==' in line:
             end = line[ : line.index(' ==')]
@@ -123,13 +130,15 @@ for ind, line in enumerate(python_3_readLines):
         end = line[ : line.index(' ==')]  # Отрезать часть "ожидаемый" ответ
         break  # Примеров может быть много, чтобы забрать самый первый пример, мы выходим на данном моменте из цикла
 
-func_str = ''.join(python_3_readLines[a : b])
-example_str = ''.join(python_3_readLines[c : d])[11 : ]+end if d != 0 else ''.join(end)[11 : ]
+func_str = ''.join(python_3_readLines[a: b])
+example_str = ''.join(python_3_readLines[c: d])[11: ] + end if d != 0 else ''.join(end)[11: ]
 
 # Текст заполняемый в новый файл
-python_3_tmpl.write(
+python_3_tmpl = open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\python_3.tmpl", 'w')
+if func_str:    
+    python_3_tmpl.write(
 '''{% comment %}New initial code template{% endcomment %}
-{% block env %}''' + imp_str[ : -1] + '''{% endblock env %}
+{% block env %}''' + imp_str[: -1] + '''{% endblock env %}
 
 {% block start %}''' 
 + func_str +
@@ -139,17 +148,19 @@ python_3_tmpl.write(
 print('Example:')
 print(""" + example_str + ''')
 {% endblock %}
-
-{% block tests %}
+''')
+python_3_tmpl.write(
+'''{% block tests %}
 {% for t in tests %}
 assert {% block call %}''' + func_name + '''({{t.input|p_args}}){% endblock %} == {% block result %}{{t.answer|p}}{% endblock %}
 {% endfor %}
-{% endblock %}
-
+{% endblock %}''')
+if func_str:    
+    python_3_tmpl.write(
+'''
 {% block final %}
 print("The mission is done! Click \'Check Solution\' to earn rewards!")
-{% endblock final %}
-''')
+{% endblock final %}''')
 
 python_3_tmpl.close()
 python_3.close()
@@ -157,7 +168,7 @@ print("\\editor\\initial_code\\python_3.tmpl - OK")
 
 
 # Парсинг файла js_node.tmpl
-js_node_tmpl = open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\js_node.tmpl", 'w')
+
 js_node = open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\js_node", 'r')
 js_node_readLines = js_node.readlines()
 
@@ -169,7 +180,6 @@ js_example_str = ''  # Строка, в которой будет хранить
 js_count = 0  # Переменная для поимки первого примера
 js_c = 0
 js_d = 0  # Markers for 'assert' search
-js_func_name = ''  # Название функции для вставки в код
 js_ex = ''
 
 for ind, line in enumerate(js_node_readLines):
@@ -179,7 +189,6 @@ for ind, line in enumerate(js_node_readLines):
     elif line.startswith('function'):
         js_a = ind
         js_bracket = line.index('(')   # Начало initial кода функции
-        js_func_name = line[9 : js_bracket]
     elif line.startswith("}"):
         js_b = ind + 1  # Конец initial кода функции
     elif line.strip().startswith("assert"):  # Начало кода console.log(func(...))
@@ -195,7 +204,9 @@ js_func_str = ''.join(js_node_readLines[js_a : js_b])
 # Так как со стройкой екзампла в джаве есть трудность (в большом количестве запятых еще до самого екзампла), реализовал обрезку функцией
 js_example_str = example_cutter(js_ex) if js_d != 0 else example_cutter(''.join(js_node_readLines[js_c])[13 : ])
 
-js_node_tmpl.write(
+js_node_tmpl = open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\js_node.tmpl", 'w')
+if js_func_str:
+    js_node_tmpl.write(
 '''{% comment %}New initial code template{% endcomment %}
 {% block env %}import assert from "assert";'''+ js_imp_str[ : -1] +'''{% endblock env %}
 
@@ -207,14 +218,17 @@ js_node_tmpl.write(
 console.log('Example:');
 console.log(''' + js_example_str +
 '''{% endblock %}
-
-// These "asserts" are used for self-checking
+''')
+js_node_tmpl.write(
+'''// These "asserts" are used for self-checking
 {% block tests %}
 {% for t in tests %}
 assert.strictEqual({% block call %}''' + js_func_name + '''({{t.input|j_args}}){% endblock %}, {% block result %}{{t.answer|j}}{% endblock %});
 {% endfor %}
-{% endblock %}
-
+{% endblock %}''')
+if js_func_str:
+    js_node_tmpl.write(
+'''
 {% block final %}
 console.log("Coding complete? Click \'Check Solution\' to earn rewards!");\n{% endblock final %}''')
 
@@ -223,7 +237,7 @@ js_node.close()
 print("\\editor\\initial_code\\js_node.tmpl - OK")
 
 # old init files deleting
-files_to_del = ("js_node", "python_3","python_27")
+files_to_del = "js_node", "python_3", "python_27"
 for file in files_to_del:
     try:
         os.remove(f"{directory_name}\\{mission_name}\\editor\\initial_code\\" + file)
@@ -272,8 +286,13 @@ for i in walking:
 
 # Парсинг файла referee.py
 # Имена функций мы уже получили в двух переменных выше "func_name" для пайтона и "js_func_name" для джавы
-referee_py = open(f"{directory_name}\\{mission_name}\\verification\\referee.py", 'w')
-referee_py.write(
+
+
+
+
+try:
+    referee_py = open(f"{directory_name}\\{mission_name}\\verification\\referee.py", 'w')
+    referee_py.write(
 '''from checkio.signals import ON_CONNECT
 from checkio import api
 from checkio.referees.io_template import CheckiOReferee
@@ -287,8 +306,8 @@ api.add_listener(
         tests=TESTS,
         # checker=to_list,
         function_name={
-            "python":"''' + func_name + '''",
-            "js": "''' + js_func_name + '''"
+            "python": ''' + func_name + ''',
+            "js": ''' + js_func_name + '''
         },
         cover_code={
             'python-3': {},
@@ -297,19 +316,20 @@ api.add_listener(
             }
         }
     ).on_ready)\n''')
+except: print("\\verification\\referee.py - PROBLEM!")
+else: print("\\verification\\referee.py - OK")
+finally: referee_py.close()
 
-referee_py.close()
-print("\\verification\\referee.py - OK")
 
-# parsing tests
+# extracting dictionary with tests
 test_py = open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'r')
 test_py_readlines = test_py.readlines()
 for ind, line in enumerate(test_py_readlines):
     if line.startswith("TESTS ="):
-        tests_dict = eval(''.join(test_py_readlines[ind : ])[8 : ])
+        tests_dict = eval(''.join(test_py_readlines[ind: ])[8: ])
         break
+test_py.close()
 
-#print(init_string)
 for category in tests_dict.values():
     for dictionary in category:
         inp = dictionary['input']
@@ -318,6 +338,7 @@ for category in tests_dict.values():
 tests_dict = json.dumps(tests_dict, indent=4)
 tests_dict = re.sub('\"input\": [\n[ ]{18}', '\"input\": [', tests_dict)
 tests_dict = re.sub('\n[ ]{12}]', ']', tests_dict)
+
 test_py = open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'w')
 test_py.write(
 '''\"\"\"
@@ -330,6 +351,7 @@ Each test is dict with
 \"\"\"
 
 TESTS = ''' + tests_dict)
+test_py.close()
 
 # create uk
 path_uk = f"{directory_name}\\{mission_name}\\translations\\uk\\info"
@@ -346,5 +368,3 @@ if not os.path.exists(path_uk + "\\task_short_description.html"):
     descr_uk.write(descr.read())
     descr.close()
     descr_uk.close()
-
-print(args_parse('data: list[int] = [1, 2]'))
