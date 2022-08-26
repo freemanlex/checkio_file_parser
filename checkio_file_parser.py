@@ -7,7 +7,7 @@ import os, json, re
 # Вставить путь к папке миссии
 directory_name = 'C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub'
 # Вставить название миссии
-mission_name = 'checkio-mission-acceptable-password-2'  
+mission_name = 'checkio-mission-acceptable-password-4'  
 
 # Функция для обрезки экзампла в файле js_node.tmpl
 def example_cutter(exmpl):  
@@ -152,8 +152,7 @@ print(""" + example_str + ''')
 python_3_tmpl.write(
 '''{% block tests %}
 {% for t in tests %}
-assert {% block call %}''' + func_name + '''({{t.input|p_args}}){% endblock %} == {% block result %}{{t.answer|p}}{% endblock %}
-{% endfor %}
+assert {% block call %}''' + func_name + '''({{t.input|p_args}}){% endblock %} == {% block result %}{{t.answer|p}}{% endblock %}{% endfor %}
 {% endblock %}''')
 if func_str:    
     python_3_tmpl.write(
@@ -223,8 +222,7 @@ js_node_tmpl.write(
 '''// These "asserts" are used for self-checking
 {% block tests %}
 {% for t in tests %}
-assert.strictEqual({% block call %}''' + js_func_name + '''({{t.input|j_args}}){% endblock %}, {% block result %}{{t.answer|j}}{% endblock %});
-{% endfor %}
+assert.strictEqual({% block call %}''' + js_func_name + '''({{t.input|j_args}}){% endblock %}, {% block result %}{{t.answer|j}}{% endblock %});{% endfor %}
 {% endblock %}''')
 if js_func_str:
     js_node_tmpl.write(
@@ -335,9 +333,11 @@ for category in tests_dict.values():
         inp = dictionary['input']
         if type(inp) != list:
             dictionary['input'] = [inp]
+
 tests_dict = json.dumps(tests_dict, indent=4)
 tests_dict = re.sub('\"input\": [\n[ ]{18}', '\"input\": [', tests_dict)
 tests_dict = re.sub('\n[ ]{12}]', ']', tests_dict)
+tests_dict = tests_dict.replace('true', 'True').replace('false', 'False')
 
 test_py = open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'w')
 test_py.write(
