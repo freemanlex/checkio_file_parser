@@ -1,4 +1,4 @@
-def init_js(directory_name, mission_name):
+def next_api(directory_name, mission_name):
 
     try:
         file = open(f"{directory_name}\\{mission_name}\\editor\\animation\\init.js", 'w')
