@@ -3,7 +3,6 @@ Next-API converter for Checkio missions
 '''
 import os
 import animation, referee, tests, python_3, js_node, task_description
-from task_description import task_desc_change
 # from googletrans import Translator
 
 # Directory path
