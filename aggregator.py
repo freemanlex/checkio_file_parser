@@ -10,6 +10,31 @@ directory_name = 'C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub'
 # Mission name
 mission_name = 'checkio-mission-acceptable-password-5'  
 
+# Converting init.js
+print(init_js.next_api(directory_name, mission_name))
+
+# Create and fill python_3.tmpl
+print(python_3.next_api(directory_name, mission_name))
+
+# Create and fill js_node.tmpl
+print(js_node.next_api(directory_name, mission_name))
+
+# Converting task_description files
+task_description.next_api(directory_name, mission_name)
+
+# Converting referee.py
+print(referee.next_api(directory_name, mission_name))
+
+# Converting tests.py
+tests.next_api(directory_name, mission_name)
+
+# old init files deleting
+for file in ("js_node", "python_3", "python_27"):
+    try:
+        os.remove(f"{directory_name}\\{mission_name}\\editor\\initial_code\\" + file)
+    except:
+        pass
+
 # parsing function arguments
 def args_parse(line: str) -> dict:
 
@@ -36,24 +61,6 @@ def args_parse(line: str) -> dict:
 
     return final_dict
 
-# Converting init.js
-print(init_js.next_api(directory_name, mission_name))
-
-# Create and fill python_3.tmpl
-print(python_3.next_api(directory_name, mission_name))
-
-# Create and fill js_node.tmpl
-print(js_node.next_api(directory_name, mission_name))
-
-# old init files deleting
-for file in ("js_node", "python_3", "python_27"):
-    try:
-        os.remove(f"{directory_name}\\{mission_name}\\editor\\initial_code\\" + file)
-    except:
-        pass
-
-# Converting task_description files
-task_description.next_api(directory_name, mission_name)
 
 # text_1 = os.walk(f'{directory_name}\\{mission_name}\\hints')
 # text_2 = open(f"{directory_name}\\{mission_name}\\hints\\{list(text_1)[0][2][0]}", 'r')
@@ -82,11 +89,3 @@ task_description.next_api(directory_name, mission_name)
 
 # task_desc_trns.close() 
 # print('-'*200, '\nTASK:\n', trns.translate(new_text, src='en', dest='uk').text)
-
-
-# Converting referee.py
-print(referee.next_api(directory_name, mission_name))
-
-# Converting tests.py
-tests.next_api(directory_name, mission_name)
-
