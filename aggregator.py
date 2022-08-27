@@ -2,13 +2,15 @@
 Next-API converter for Checkio missions
 '''
 import os
-from parser import editor, verification
+# import sys
+# sys.path.append("C:\Users\ТЕХНОРАЙ\Documents\GitHub\checkio_file_parser\parser")
+import animation, referee, tests
 # from googletrans import Translator
 
 # Directory path
 directory_name = 'C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub'
 # Mission name
-mission_name = 'checkio-mission-acceptable-password-4'  
+mission_name = 'checkio-mission-acceptable-password-5'  
 
 # Функция для обрезки экзампла в файле js_node.tmpl
 def example_cutter(exmpl):  
@@ -73,10 +75,10 @@ def args_parse(line: str) -> dict:
     return final_dict
 
 # Getting function names
-func_name, js_func_name = verification.referee.extract_func_names(directory_name, mission_name)
+func_name, js_func_name = referee.extract_func_names(directory_name, mission_name)
 
 # Converting init.js
-print(editor.animation.init_js(directory_name, mission_name))
+print(animation.init_js(directory_name, mission_name))
 
 
 # Парсинг файла python_3.tmpl
@@ -261,10 +263,10 @@ for i in walking:
 
 
 # Converting referee.py
-print(verification.referee.next_api(directory_name, mission_name))
+print(referee.next_api(directory_name, mission_name))
 
 # Converting tests.py
-verification.tests.next_api(directory_name, mission_name)
+tests.next_api(directory_name, mission_name)
 
 # create uk
 path_uk = f"{directory_name}\\{mission_name}\\translations\\uk\\info"
