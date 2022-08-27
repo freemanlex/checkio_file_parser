@@ -2,7 +2,7 @@
 Next-API converter for Checkio missions
 '''
 import os
-import animation, referee, tests, python_3, js_node, task_description
+import init_js, referee, tests, python_3, js_node, task_description
 # from googletrans import Translator
 
 # Directory path
@@ -37,7 +37,7 @@ def args_parse(line: str) -> dict:
     return final_dict
 
 # Converting init.js
-print(animation.init_js(directory_name, mission_name))
+print(init_js.next_api(directory_name, mission_name))
 
 # Create and fill python_3.tmpl
 print(python_3.next_api(directory_name, mission_name))
@@ -52,7 +52,9 @@ for file in ("js_node", "python_3", "python_27"):
     except:
         pass
 
+# Converting task_description files
 task_description.next_api(directory_name, mission_name)
+
 # text_1 = os.walk(f'{directory_name}\\{mission_name}\\hints')
 # text_2 = open(f"{directory_name}\\{mission_name}\\hints\\{list(text_1)[0][2][0]}", 'r')
 # texts = text_2.read()
