@@ -83,4 +83,4 @@ def next_api(directory_name, mission_name):
     js_node_tmpl.close()
     js_node.close()
     
-    return "\\editor\\initial_code\\js_node.tmpl - OK"
+    print("\\editor\\initial_code\\js_node.tmpl - OK")

@@ -1,5 +1,5 @@
 '''
-Next-API converter for Checkio missions
+Next-API converter for CheckiO missions
 '''
 import os
 import init_js, referee, tests, python_3, js_node, task_description
@@ -11,19 +11,19 @@ directory_name = 'C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub'
 mission_name = 'checkio-mission-acceptable-password-5'  
 
 # Converting init.js
-print(init_js.next_api(directory_name, mission_name))
+init_js.next_api(directory_name, mission_name)
 
 # Create and fill python_3.tmpl
-print(python_3.next_api(directory_name, mission_name))
+python_3.next_api(directory_name, mission_name)
 
 # Create and fill js_node.tmpl
-print(js_node.next_api(directory_name, mission_name))
+js_node.next_api(directory_name, mission_name)
 
 # Converting task_description files
 task_description.next_api(directory_name, mission_name)
 
 # Converting referee.py
-print(referee.next_api(directory_name, mission_name))
+referee.next_api(directory_name, mission_name)
 
 # Converting tests.py
 tests.next_api(directory_name, mission_name)

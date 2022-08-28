@@ -69,4 +69,4 @@ def next_api(directory_name, mission_name):
     python_3_tmpl.close()
     python_3.close()
     
-    return "\\editor\\initial_code\\python_3.tmpl - OK"
+    print("\\editor\\initial_code\\python_3.tmpl - OK")

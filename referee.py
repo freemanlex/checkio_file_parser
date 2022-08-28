@@ -42,8 +42,8 @@ api.add_listener(
         }
     ).on_ready)\n''')
     except:
-        return "\\verification\\referee.py - PROBLEM!"
+        print("\\verification\\referee.py - PROBLEM!")
     else:
-        return "\\verification\\referee.py - OK"
+        print("\\verification\\referee.py - OK")
     finally:
         referee_py.close()

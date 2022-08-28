@@ -11,8 +11,8 @@ def next_api(directory_name, mission_name):
 );
 ''')
     except:
-        return "init.js - PROBLEM!!"
+        print("init.js - PROBLEM!!")
     else:
-        return "\\editor\\animation\\init.js - OK"
+        print("\\editor\\animation\\init.js - OK")
     finally:
         file.close()
