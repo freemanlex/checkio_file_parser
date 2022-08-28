@@ -28,16 +28,15 @@ def next_api(directory_name, mission_name):
         elif line.lstrip().startswith('assert'):
             c = ind  # Начало кода в print(func(...))
             if '==' in line:
-                end = line[ : line.index(' ==')]
+                d = ind
                 break
-        elif '==' in line:
+        elif '==' in line and ind > c > 0:
             d = ind  # Конец кода в print(func(...))
-            end = line[ : line.index(' ==')]  # Отрезать часть "ожидаемый" ответ
-            break  # Примеров может быть много, чтобы забрать самый первый пример, мы выходим на данном моменте из цикла
+            break
 
-    func_str = ''.join(python_3_readLines[a: b])
-    example_str = ''.join(python_3_readLines[c: d])[11: ] + end if d != 0 else ''.join(end)[11: ]
-
+    func_str = ''.join(python_3_readLines[a: b + 1])
+    example_str = ''.join(python_3_readLines[c: d + 1])
+    example_str = example_str.rpartition("==")[0].strip()[7:]
     # Текст заполняемый в новый файл
     python_3_tmpl = open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\python_3.tmpl", 'w')
     if func_str:    
@@ -45,14 +44,15 @@ def next_api(directory_name, mission_name):
 '''{% comment %}New initial code template{% endcomment %}
 {% block env %}''' + imp_str[: -1] + '''{% endblock env %}
 
-{% block start %}''' 
-+ func_str +
-"""{% endblock start %}
+{% block start %}
+''' + func_str +
+'''{% endblock start %}
 
 {% block example %}
 print('Example:')
-print(""" + example_str + ''')
+print(''' + example_str + ''')
 {% endblock %}
+
 ''')
     python_3_tmpl.write(
 '''{% block tests %}
@@ -62,6 +62,7 @@ assert {% block call %}''' + func_name + '''({{t.input|p_args}}){% endblock %} =
     if func_str:    
         python_3_tmpl.write(
 '''
+
 {% block final %}
 print("The mission is done! Click \'Check Solution\' to earn rewards!")
 {% endblock final %}''')

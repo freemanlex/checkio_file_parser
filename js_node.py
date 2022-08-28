@@ -59,14 +59,15 @@ def next_api(directory_name, mission_name):
 '''{% comment %}New initial code template{% endcomment %}
 {% block env %}import assert from "assert";'''+ js_imp_str[ : -1] +'''{% endblock env %}
 
-{% block start %}'''
-+ js_func_str +
+{% block start %}
+''' + js_func_str +
 '''{% endblock start %}
 
 {% block example %}
 console.log('Example:');
 console.log(''' + js_example_str +
 '''{% endblock %}
+
 ''')
     js_node_tmpl.write(
 '''// These "asserts" are used for self-checking
@@ -77,6 +78,7 @@ assert.strictEqual({% block call %}''' + js_func_name + '''({{t.input|j_args}}){
     if js_func_str:
         js_node_tmpl.write(
 '''
+
 {% block final %}
 console.log("Coding complete? Click \'Check Solution\' to earn rewards!");\n{% endblock final %}''')
 

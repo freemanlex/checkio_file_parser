@@ -8,7 +8,7 @@ import init_js, referee, tests, python_3, js_node, task_description
 # Directory path
 directory_name = 'C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub'
 # Mission name
-mission_name = 'checkio-mission-acceptable-password-6'  
+mission_name = 'checkio-mission-count-digits'  
 
 files_to_convert = (
     init_js,
