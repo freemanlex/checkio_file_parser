@@ -8,7 +8,7 @@ import init_js, referee, tests, python_3, js_node, task_description
 # Directory path
 directory_name = 'C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub'
 # Mission name
-mission_name = 'checkio-mission-acceptable-password-5'  
+mission_name = 'checkio-mission-acceptable-password-6'  
 
 # Converting init.js
 init_js.next_api(directory_name, mission_name)
