@@ -36,3 +36,4 @@ Each test is dict with
 
 TESTS = ''' + tests_dict)
     test_py.close()
+    print("\\verification\\tests.py - OK")

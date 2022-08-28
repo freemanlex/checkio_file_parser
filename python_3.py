@@ -42,29 +42,29 @@ def next_api(directory_name, mission_name):
     python_3_tmpl = open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\python_3.tmpl", 'w')
     if func_str:    
         python_3_tmpl.write(
-    '''{% comment %}New initial code template{% endcomment %}
-    {% block env %}''' + imp_str[: -1] + '''{% endblock env %}
+'''{% comment %}New initial code template{% endcomment %}
+{% block env %}''' + imp_str[: -1] + '''{% endblock env %}
 
-    {% block start %}''' 
-    + func_str +
-    """{% endblock start %}
+{% block start %}''' 
++ func_str +
+"""{% endblock start %}
 
-    {% block example %}
-    print('Example:')
-    print(""" + example_str + ''')
-    {% endblock %}
-    ''')
+{% block example %}
+print('Example:')
+print(""" + example_str + ''')
+{% endblock %}
+''')
+python_3_tmpl.write(
+'''{% block tests %}
+{% for t in tests %}
+assert {% block call %}''' + func_name + '''({{t.input|p_args}}){% endblock %} == {% block result %}{{t.answer|p}}{% endblock %}{% endfor %}
+{% endblock %}''')
+if func_str:    
     python_3_tmpl.write(
-    '''{% block tests %}
-    {% for t in tests %}
-    assert {% block call %}''' + func_name + '''({{t.input|p_args}}){% endblock %} == {% block result %}{{t.answer|p}}{% endblock %}{% endfor %}
-    {% endblock %}''')
-    if func_str:    
-        python_3_tmpl.write(
-    '''
-    {% block final %}
-    print("The mission is done! Click \'Check Solution\' to earn rewards!")
-    {% endblock final %}''')
+'''
+{% block final %}
+print("The mission is done! Click \'Check Solution\' to earn rewards!")
+{% endblock final %}''')
 
     python_3_tmpl.close()
     python_3.close()

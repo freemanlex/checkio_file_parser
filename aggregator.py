@@ -10,23 +10,18 @@ directory_name = 'C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub'
 # Mission name
 mission_name = 'checkio-mission-acceptable-password-6'  
 
-# Converting init.js
-init_js.next_api(directory_name, mission_name)
+files_to_convert = (
+    init_js,
+    python_3,
+    js_node, 
+    task_description, 
+    referee, 
+    tests 
+)
 
-# Create and fill python_3.tmpl
-python_3.next_api(directory_name, mission_name)
+for file in files_to_convert:
+    file.next_api(directory_name, mission_name)
 
-# Create and fill js_node.tmpl
-js_node.next_api(directory_name, mission_name)
-
-# Converting task_description files
-task_description.next_api(directory_name, mission_name)
-
-# Converting referee.py
-referee.next_api(directory_name, mission_name)
-
-# Converting tests.py
-tests.next_api(directory_name, mission_name)
 
 # old init files deleting
 for file in ("js_node", "python_3", "python_27"):
