@@ -68,14 +68,14 @@ console.log('Example:');
 console.log(''' + js_example_str +
 '''{% endblock %}
 ''')
-js_node_tmpl.write(
+    js_node_tmpl.write(
 '''// These "asserts" are used for self-checking
 {% block tests %}
 {% for t in tests %}
 assert.strictEqual({% block call %}''' + js_func_name + '''({{t.input|j_args}}){% endblock %}, {% block result %}{{t.answer|j}}{% endblock %});{% endfor %}
 {% endblock %}''')
-if js_func_str:
-    js_node_tmpl.write(
+    if js_func_str:
+        js_node_tmpl.write(
 '''
 {% block final %}
 console.log("Coding complete? Click \'Check Solution\' to earn rewards!");\n{% endblock final %}''')

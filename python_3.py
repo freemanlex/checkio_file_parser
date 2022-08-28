@@ -54,13 +54,13 @@ print('Example:')
 print(""" + example_str + ''')
 {% endblock %}
 ''')
-python_3_tmpl.write(
+    python_3_tmpl.write(
 '''{% block tests %}
 {% for t in tests %}
 assert {% block call %}''' + func_name + '''({{t.input|p_args}}){% endblock %} == {% block result %}{{t.answer|p}}{% endblock %}{% endfor %}
 {% endblock %}''')
-if func_str:    
-    python_3_tmpl.write(
+    if func_str:    
+        python_3_tmpl.write(
 '''
 {% block final %}
 print("The mission is done! Click \'Check Solution\' to earn rewards!")
