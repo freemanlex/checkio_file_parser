@@ -42,7 +42,7 @@ def next_api(directory_name, mission_name):
     if func_str:    
         python_3_tmpl.write(
 '''{% comment %}New initial code template{% endcomment %}
-{% block env %}''' + imp_str[: -1] + '''{% endblock env %}
+{% block env %}''' + imp_str + '''{% endblock env %}
 
 {% block start %}
 ''' + func_str +
