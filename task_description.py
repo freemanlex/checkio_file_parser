@@ -42,6 +42,7 @@ def next_api(directory_name, mission_name):
     path_uk = f"{directory_name}\\{mission_name}\\translations\\uk\\info"
     if not os.path.exists(path_uk):
         os.makedirs(path_uk)
+    if not os.path.exists(path_uk + "\\task_description.html"):
         descr = open(f"{directory_name}\\{mission_name}\\info\\task_description.html", 'r')
         descr_uk = open(path_uk + "\\task_description.html", 'w')
         descr_uk.write(descr.read())
