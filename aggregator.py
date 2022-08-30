@@ -7,8 +7,10 @@ import init_js, referee, tests, python_3, js_node, task_description
 
 # Directory path
 directory_name = 'C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub'
+if not os.path.exists(directory_name):
+    directory_name = 'C:\\Users\\o.zozula\\Documents\\GitHub'
 # Mission name
-mission_name = 'checkio-mission-sort-by-extension'  
+mission_name = 'checkio-mission-isometric-strings'  
 
 files_to_convert = (
     init_js,
@@ -16,7 +18,7 @@ files_to_convert = (
     js_node, 
     task_description, 
     referee, 
-    tests 
+   # tests 
 )
 
 for file in files_to_convert:
