@@ -54,8 +54,7 @@ def next_api(directory_name, mission_name):
     js_example_str = example_cutter(js_ex) if js_d != 0 else example_cutter(''.join(js_node_readLines[js_c])[13 : ])
 
     js_node_tmpl = open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\js_node.tmpl", 'w')
-    if js_func_str:
-        js_node_tmpl.write(
+    js_node_tmpl.write(
 '''{% comment %}New initial code template{% endcomment %}
 {% block env %}import assert from "assert";'''+ js_imp_str[ : -1] +'''{% endblock env %}
 
@@ -63,24 +62,22 @@ def next_api(directory_name, mission_name):
 ''' + js_func_str +
 '''{% endblock start %}
 
-{% block example %}
+{% block example %}''')
+    if js_func_str:
+        js_node_tmpl.write('''
 console.log('Example:');
-console.log(''' + js_example_str +
-'''{% endblock %}
+console.log(''' + js_example_str + ''')''')
+    js_node_tmpl.write('''{% endblock %}
 
-''')
-    js_node_tmpl.write(
-'''// These "asserts" are used for self-checking
+// These "asserts" are used for self-checking
 {% block tests %}
 {% for t in tests %}
 assert.strictEqual({% block call %}''' + js_func_name + '''({{t.input|j_args}}){% endblock %}, {% block result %}{{t.answer|j}}{% endblock %});{% endfor %}
-{% endblock %}''')
-    if js_func_str:
-        js_node_tmpl.write(
-'''
+{% endblock %}
 
 {% block final %}
-console.log("Coding complete? Click \'Check Solution\' to earn rewards!");\n{% endblock final %}''')
+console.log("Coding complete? Click \'Check Solution\' to earn rewards!");
+{% endblock final %}''')
 
     js_node_tmpl.close()
     js_node.close()

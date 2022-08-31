@@ -39,8 +39,8 @@ def next_api(directory_name, mission_name):
     example_str = example_str.rpartition("==")[0].strip()[7:]
     # Текст заполняемый в новый файл
     python_3_tmpl = open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\python_3.tmpl", 'w')
-    if func_str:    
-        python_3_tmpl.write(
+       
+    python_3_tmpl.write(
 '''{% comment %}New initial code template{% endcomment %}
 {% block env %}''' + imp_str + '''{% endblock env %}
 
@@ -48,20 +48,17 @@ def next_api(directory_name, mission_name):
 ''' + func_str +
 '''{% endblock start %}
 
-{% block example %}
+{% block example %}''')
+    if func_str:
+        python_3_tmpl.write('''
 print('Example:')
-print(''' + example_str + ''')
-{% endblock %}
+print(''' + example_str + ''')''')
+    python_3_tmpl.write('''{% endblock %}
 
-''')
-    python_3_tmpl.write(
-'''{% block tests %}
+{% block tests %}
 {% for t in tests %}
 assert {% block call %}''' + func_name + '''({{t.input|p_args}}){% endblock %} == {% block result %}{{t.answer|p}}{% endblock %}{% endfor %}
-{% endblock %}''')
-    if func_str:    
-        python_3_tmpl.write(
-'''
+{% endblock %}
 
 {% block final %}
 print("The mission is done! Click \'Check Solution\' to earn rewards!")
