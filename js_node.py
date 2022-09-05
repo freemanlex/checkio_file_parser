@@ -43,15 +43,16 @@ def next_api(directory_name, mission_name):
         elif line.strip().startswith("assert"):  # Начало кода console.log(func(...))
             if js_count == 1:  # На втором кругу попадаем сюда, получаем конец первого примера и выходим из цикла
                 js_d = ind
-                js_ex = ''.join(js_node_readLines[js_c : js_d])[line.find('ual(') + 4 : ]
+                js_ex = ''.join(js_node_readLines[js_c : js_d])[line.find('ual(') + 4: -2]
                 break
             js_c = ind  # Начало кода из первого примера
             js_count += 1
 
-
+    print(js_ex)
     js_func_str = ''.join(js_node_readLines[js_a : js_b])
     # Так как со стройкой екзампла в джаве есть трудность (в большом количестве запятых еще до самого екзампла), реализовал обрезку функцией
     js_example_str = example_cutter(js_ex) if js_d != 0 else example_cutter(''.join(js_node_readLines[js_c])[13 : ])
+    print(js_example_str)
 
     js_node_tmpl = open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\js_node.tmpl", 'w')
     js_node_tmpl.write(
@@ -66,7 +67,7 @@ def next_api(directory_name, mission_name):
     if js_func_str:
         js_node_tmpl.write('''
 console.log('Example:');
-console.log(''' + js_example_str + ''')''')
+console.log(''' + js_example_str + ''';''')
     js_node_tmpl.write('''{% endblock %}
 
 // These "asserts" are used for self-checking
