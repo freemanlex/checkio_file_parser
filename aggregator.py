@@ -10,7 +10,7 @@ directory_name = 'C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub'
 if not os.path.exists(directory_name):
     directory_name = 'C:\\Users\\o.zozula\\Documents\\GitHub'
 # Mission name
-mission_name = 'checkio-mission-find-enemy'  
+mission_name = 'checkio-mission-stressful-subject'  
 
 files_to_convert = (
     init_js,

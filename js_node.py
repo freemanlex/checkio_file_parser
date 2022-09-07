@@ -3,15 +3,17 @@ import referee
 
 # Функция для обрезки экзампла в файле js_node.tmpl
 def example_cutter(exmpl):  
-    js_fin = exmpl
-    js_ex_reverse = js_fin[::-1]  # Переворачивается пример, для удобной обрезки по "ключевой" метке
-    for i in range(len(js_ex_reverse)):
-        if js_ex_reverse[i] == ',' and js_ex_reverse[i + 1] == ')':  # "Ключевая" метка это ",)", в прямой строке "),"
-            js_ex_reverse = js_ex_reverse[i + 1:]  # что является концом условия и началом предполагаемого ответа
-            js_fin = js_ex_reverse[::-1] + ")\n"
-            break
 
-    return js_fin  # Возврат отредактированного куска
+    s = ""
+    for char in exmpl:
+        if char in "[{()}]":
+            s += char
+            if s[-2:] in ("[]", "()", "{}"):
+                s = s[:-2]
+        elif char == ",":
+            exmpl = exmpl.replace(',', ('.', '*')[not s], 1)
+    
+    return exmpl.split("*", 1)[0]
 
 
 def next_api(directory_name, mission_name):
@@ -26,10 +28,9 @@ def next_api(directory_name, mission_name):
     js_a = 0
     js_b = 0  # Markers for 'def' search
     js_example_str = ''  # Строка, в которой будет храниться код console.log(func(...))
-    js_count = 0  # Переменная для поимки первого примера
+    js_count = False  # Переменная для поимки первого примера
     js_c = 0
     js_d = 0  # Markers for 'assert' search
-    js_ex = ''
 
     for ind, line in enumerate(js_node_readLines):
         if line.startswith('import'):
@@ -41,18 +42,16 @@ def next_api(directory_name, mission_name):
         elif line.startswith("}"):
             js_b = ind + 1  # Конец initial кода функции
         elif line.strip().startswith("assert"):  # Начало кода console.log(func(...))
-            if js_count == 1:  # На втором кругу попадаем сюда, получаем конец первого примера и выходим из цикла
-                js_d = ind
-                js_ex = ''.join(js_node_readLines[js_c : js_d])[line.find('ual(') + 4: -2]
+            if js_count:  # На втором кругу попадаем сюда, получаем конец первого примера и выходим из цикла
+                js_ex = ''.join(js_node_readLines[js_c: (js_c + 1, ind)[bool(ind)]])
                 break
             js_c = ind  # Начало кода из первого примера
-            js_count += 1
+            js_count = True
 
-    print(js_ex)
-    js_func_str = ''.join(js_node_readLines[js_a : js_b])
+    
+    js_func_str = ''.join(js_node_readLines[js_a: js_b])
     # Так как со стройкой екзампла в джаве есть трудность (в большом количестве запятых еще до самого екзампла), реализовал обрезку функцией
-    js_example_str = example_cutter(js_ex) if js_d != 0 else example_cutter(''.join(js_node_readLines[js_c])[13 : ])
-    print(js_example_str)
+    js_example_str = example_cutter(js_ex[line.find('ual(')+4:])
 
     js_node_tmpl = open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\js_node.tmpl", 'w')
     js_node_tmpl.write(
@@ -68,7 +67,8 @@ def next_api(directory_name, mission_name):
         js_node_tmpl.write('''
 console.log('Example:');
 console.log(''' + js_example_str + ''';''')
-    js_node_tmpl.write('''{% endblock %}
+    js_node_tmpl.write('''
+{% endblock %}
 
 // These "asserts" are used for self-checking
 {% block tests %}
