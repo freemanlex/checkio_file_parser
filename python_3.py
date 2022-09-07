@@ -53,7 +53,8 @@ def next_api(directory_name, mission_name):
         python_3_tmpl.write('''
 print('Example:')
 print(''' + example_str + ''')''')
-    python_3_tmpl.write('''{% endblock %}
+    python_3_tmpl.write('''
+{% endblock %}
 
 {% block tests %}
 {% for t in tests %}
