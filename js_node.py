@@ -12,6 +12,7 @@ def example_cutter(exmpl):
                 s = s[:-2]
         elif char == ",":
             exmpl = exmpl.replace(',', ('.', '*')[not s], 1)
+    exmpl = exmpl.replace('.', ',')
     
     return exmpl.split("*", 1)[0]
 
@@ -51,8 +52,8 @@ def next_api(directory_name, mission_name, flag):
     
     js_func_str = ''.join(js_node_readLines[js_a: js_b])
     # Так как со стройкой екзампла в джаве есть трудность (в большом количестве запятых еще до самого екзампла), реализовал обрезку функцией
-    js_example_str = example_cutter(js_ex[line.find('ual(')+4:])
-
+    js_example_str = example_cutter(js_ex[line.find('ual(')+4:-1])
+    print(js_example_str)
     js_node_tmpl = open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\js_node.tmpl", 'w')
     js_node_tmpl.write(
 '''{% comment %}New initial code template{% endcomment %}
@@ -66,14 +67,14 @@ def next_api(directory_name, mission_name, flag):
     if js_func_str:
         js_node_tmpl.write('''
 console.log('Example:');
-console.log(''' + "" if flag else "JSON.stringify(" + js_example_str + "" if flag else ")" +''';''')
+console.log(''' + ('' if flag else 'JSON.stringify(') + js_example_str + ('' if flag else ')') +''';''')
     js_node_tmpl.write('''
 {% endblock %}
 
 // These "asserts" are used for self-checking
 {% block tests %}
 {% for t in tests %}
-assert.'''+ "s" if flag else "deepS" + '''trictEqual({% block call %}''' + js_func_name + '''({{t.input|j_args}}){% endblock %}, {% block result %}{{t.answer|j}}{% endblock %});{% endfor %}
+assert.''' + ('s' if flag else 'deepS') + '''trictEqual({% block call %}''' + js_func_name + '''({{t.input|j_args}}){% endblock %}, {% block result %}{{t.answer|j}}{% endblock %});{% endfor %}
 {% endblock %}
 
 {% block final %}
