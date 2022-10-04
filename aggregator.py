@@ -10,7 +10,9 @@ directory_name = 'C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub'
 if not os.path.exists(directory_name):
     directory_name = 'C:\\Users\\o.zozula\\Documents\\GitHub'
 # Mission name
-mission_name = 'checkio-mission-stressful-subject'  
+mission_name = 'checkio-mission-frequency-sort'
+
+return_is_simple = True
 
 files_to_convert = (
     init_js,
@@ -22,7 +24,10 @@ files_to_convert = (
 )
 
 for file in files_to_convert:
-    file.next_api(directory_name, mission_name)
+    if file == js_node:
+        file.next_api(directory_name, mission_name, return_is_simple)
+    else:
+        file.next_api(directory_name, mission_name)
 
 
 # old init files deleting

@@ -16,7 +16,7 @@ def example_cutter(exmpl):
     return exmpl.split("*", 1)[0]
 
 
-def next_api(directory_name, mission_name):
+def next_api(directory_name, mission_name, flag):
 
     _, js_func_name = referee.extract_func_names(directory_name, mission_name)
 
@@ -66,14 +66,14 @@ def next_api(directory_name, mission_name):
     if js_func_str:
         js_node_tmpl.write('''
 console.log('Example:');
-console.log(''' + js_example_str + ''';''')
+console.log(''' + "" if flag else "JSON.stringify(" + js_example_str + "" if flag else ")" +''';''')
     js_node_tmpl.write('''
 {% endblock %}
 
 // These "asserts" are used for self-checking
 {% block tests %}
 {% for t in tests %}
-assert.strictEqual({% block call %}''' + js_func_name + '''({{t.input|j_args}}){% endblock %}, {% block result %}{{t.answer|j}}{% endblock %});{% endfor %}
+assert.'''+ "s" if flag else "deepS" + '''trictEqual({% block call %}''' + js_func_name + '''({{t.input|j_args}}){% endblock %}, {% block result %}{{t.answer|j}}{% endblock %});{% endfor %}
 {% endblock %}
 
 {% block final %}
