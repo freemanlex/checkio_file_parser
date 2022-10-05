@@ -10,9 +10,9 @@ directory_name = 'C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub'
 if not os.path.exists(directory_name):
     directory_name = 'C:\\Users\\o.zozula\\Documents\\GitHub'
 # Mission name
-mission_name = 'checkio-mission-create-zigzag-array'
+mission_name = 'checkio-mission-is-majority'
 
-return_is_simple = False
+return_is_simple = True
 
 files_to_convert = (
     init_js,

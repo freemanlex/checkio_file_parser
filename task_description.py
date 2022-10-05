@@ -16,6 +16,8 @@ def task_desc_change(path):
                 task_start = ind
             elif ind > task_start and '{% endif' in line:
                 task_end = ind
+            else:
+                line.replace("if interpreter.slug == \"js-node\"", "if is_js")
         lines[task_start: task_end + 1] = if_str  # Заменяем ненужный кусок на актуальный код
     task_description.close()
     task_description = open(rf'{path}', mode='w', encoding='utf-8')

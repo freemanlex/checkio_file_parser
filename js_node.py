@@ -53,7 +53,6 @@ def next_api(directory_name, mission_name, flag):
     js_func_str = ''.join(js_node_readLines[js_a: js_b])
     # Так как со стройкой екзампла в джаве есть трудность (в большом количестве запятых еще до самого екзампла), реализовал обрезку функцией
     js_example_str = example_cutter(js_ex[line.find('ual(')+4:-1])
-    print(js_example_str)
     js_node_tmpl = open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\js_node.tmpl", 'w')
     js_node_tmpl.write(
 '''{% comment %}New initial code template{% endcomment %}
