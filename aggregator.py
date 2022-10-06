@@ -11,8 +11,10 @@ if not os.path.exists(directory_name):
     directory_name = 'C:\\Users\\o.zozula\\Documents\\GitHub'
 # Mission name
 mission_name = 'checkio-mission-is-majority'
-
-return_is_simple = True
+# js modifier
+js_complex = True
+# py modifier
+py_iterable = True
 
 files_to_convert = (
     init_js,
@@ -25,7 +27,9 @@ files_to_convert = (
 
 for file in files_to_convert:
     if file == js_node:
-        file.next_api(directory_name, mission_name, return_is_simple)
+        file.next_api(directory_name, mission_name, js_complex)
+    elif file in (python_3, referee):
+        file.next_api(directory_name, mission_name, py_iterable)
     else:
         file.next_api(directory_name, mission_name)
 

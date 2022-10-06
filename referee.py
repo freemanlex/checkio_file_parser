@@ -11,7 +11,7 @@ def extract_func_names(directory_name, mission_name):
 
     return func_name, js_func_name
 
-def next_api(directory_name, mission_name):
+def next_api(directory_name, mission_name, py_iterable):
 
     func_name, js_func_name = extract_func_names(directory_name, mission_name)
 
@@ -21,7 +21,7 @@ def next_api(directory_name, mission_name):
 '''from checkio.signals import ON_CONNECT
 from checkio import api
 from checkio.referees.io_template import CheckiOReferee
-# from checkio.referees.checkers import to_list
+''' + ('' if py_iterable else '# ') + '''from checkio.referees.checkers import to_list
 
 from tests import TESTS
 
@@ -29,7 +29,7 @@ api.add_listener(
     ON_CONNECT,
     CheckiOReferee(
         tests=TESTS,
-        # checker=to_list,
+        ''' + ('' if py_iterable else '# ') + '''checker=to_list,
         function_name={
             "python": "''' + func_name + '''",
             "js": "''' + js_func_name + '''"

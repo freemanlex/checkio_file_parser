@@ -1,7 +1,7 @@
 import referee
 
 
-def next_api(directory_name, mission_name):
+def next_api(directory_name, mission_name, py_iterable):
 
     func_name, _ = referee.extract_func_names(directory_name, mission_name)
 
@@ -52,13 +52,13 @@ def next_api(directory_name, mission_name):
     if func_str:
         python_3_tmpl.write('''
 print('Example:')
-print(''' + example_str + ''')''')
+print(''' + ('list(' if py_iterable else '') + example_str + (')' if py_iterable else '') + ''')''')
     python_3_tmpl.write('''
 {% endblock %}
 
 {% block tests %}
 {% for t in tests %}
-assert {% block call %}''' + func_name + '''({{t.input|p_args}}){% endblock %} == {% block result %}{{t.answer|p}}{% endblock %}{% endfor %}
+assert {% block call %}''' + ('list(' if py_iterable else '') + func_name + (')' if py_iterable else '') + '''({{t.input|p_args}}){% endblock %} == {% block result %}{{t.answer|p}}{% endblock %}{% endfor %}
 {% endblock %}
 
 {% block final %}
