@@ -3,9 +3,9 @@ def extract_func_names(directory_name, mission_name):
     referee_py = open(f"{directory_name}\\{mission_name}\\verification\\referee.py", 'r')
     for line in referee_py.readlines():
         if line.lstrip().startswith("\"python"):
-            func_name = line.split(":")[1].strip()[1:-2]
+            func_name = line.split(":")[1].strip("\",")
         elif line.lstrip().startswith("\"js"):
-            js_func_name = line.split(":")[1].strip()[1:-1]
+            js_func_name = line.split(":")[1].strip("\",")
             break
     referee_py.close()
 
