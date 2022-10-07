@@ -31,7 +31,6 @@ def next_api(directory_name, mission_name, js_complex):
     js_example_str = ''  # Строка, в которой будет храниться код console.log(func(...))
     js_count = False  # Переменная для поимки первого примера
     js_c = 0
-    js_d = 0  # Markers for 'assert' search
 
     for ind, line in enumerate(js_node_readLines):
         if line.startswith('import'):
@@ -39,7 +38,6 @@ def next_api(directory_name, mission_name, js_complex):
                 js_imp_str += line  # Ищем по тексту импортированные библиотеки
         elif line.startswith('function'):
             js_a = ind
-            js_bracket = line.index('(')   # Начало initial кода функции
         elif line.startswith("}"):
             js_b = ind + 1  # Конец initial кода функции
         elif line.strip().startswith("assert"):  # Начало кода console.log(func(...))
