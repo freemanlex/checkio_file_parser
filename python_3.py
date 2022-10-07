@@ -52,13 +52,13 @@ def next_api(directory_name, mission_name, py_iterable):
     if func_str:
         python_3_tmpl.write('''
 print('Example:')
-print(''' + ('list(' if py_iterable else '') + example_str + (')' if py_iterable else '') + ''')''')
+print(''' + 'list('*py_iterable + example_str + ')'*py_iterable + ''')''')
     python_3_tmpl.write('''
 {% endblock %}
 
 {% block tests %}
 {% for t in tests %}
-assert {% block call %}''' + ('list(' if py_iterable else '') + func_name + (')' if py_iterable else '') + '''({{t.input|p_args}}){% endblock %} == {% block result %}{{t.answer|p}}{% endblock %}{% endfor %}
+assert {% block call %}''' + 'list('*py_iterable + func_name  + '''({{t.input|p_args}})''' + ')'*py_iterable + '''{% endblock %} == {% block result %}{{t.answer|p}}{% endblock %}{% endfor %}
 {% endblock %}
 
 {% block final %}

@@ -21,7 +21,7 @@ def next_api(directory_name, mission_name, py_iterable):
 '''from checkio.signals import ON_CONNECT
 from checkio import api
 from checkio.referees.io_template import CheckiOReferee
-''' + ('' if py_iterable else '# ') + '''from checkio.referees.checkers import to_list
+''' + '# '*(not py_iterable) + '''from checkio.referees.checkers import to_list
 
 from tests import TESTS
 
@@ -29,7 +29,7 @@ api.add_listener(
     ON_CONNECT,
     CheckiOReferee(
         tests=TESTS,
-        ''' + ('' if py_iterable else '# ') + '''checker=to_list,
+        ''' + '# '*(not py_iterable) + '''checker=to_list,
         function_name={
             "python": "''' + func_name + '''",
             "js": "''' + js_func_name + '''"

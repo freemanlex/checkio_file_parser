@@ -66,7 +66,7 @@ def next_api(directory_name, mission_name, js_complex):
     if js_func_str:
         js_node_tmpl.write('''
 console.log('Example:');
-console.log(''' + ('JSON.stringify(' if js_complex else '') + js_example_str + (')' if js_complex else '') +''';''')
+console.log(''' + 'JSON.stringify('*js_complex + js_example_str + ')'*js_complex +''');''')
     js_node_tmpl.write('''
 {% endblock %}
 
