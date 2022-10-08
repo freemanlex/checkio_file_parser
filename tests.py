@@ -7,17 +7,21 @@ def next_api(directory_name: str, mission_name: str) -> None:
     with open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'r') as test_py:
         test_py_readlines = test_py.readlines()
         for ind, line in enumerate(test_py_readlines):
-            if (l:=line.lstrip()).startswith("output"):
+            #print(line)
+            if (l:=line.lstrip()).startswith("\"answer\":"):
                 end = ind
+                #print(end)
             else:
-                if l.startswith("input"):
+                if l.startswith("\"input\":"):
                     start = ind
+                    #print(start)
                 continue
             test = "".join(test_py_readlines[start: end]).strip()
             title, out = test.split(":")
-            if type(eval(out.lstrip())) != list:
-                out = '[' + out.strip() + ']'
-                test_py_readlines[start: end] = ": ".join(title, out)
+            #print(out.strip(", \n"))
+            if type(eval(out.strip(", \n"))) != list:
+                out = '[' + out.strip(", \n") + ']\n'
+                test_py_readlines[start: end] = ": ".join([title, out])
 
     with open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'w') as test_py:
         test_py.write("".join(test_py_readlines))

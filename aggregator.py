@@ -10,11 +10,11 @@ directory_name = 'C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub'
 if not os.path.exists(directory_name):
     directory_name = 'C:\\Users\\o.zozula\\Documents\\GitHub'
 # Mission name
-mission_name = 'checkio-mission-is-majority'
+mission_name = 'checkio-task-median'
 # js modifier
-js_complex = True
+js_complex = False
 # py modifier
-py_iterable = True
+py_iterable = False
 
 files_to_convert = (
     init_js,
@@ -22,7 +22,7 @@ files_to_convert = (
     js_node, 
     task_description, 
     referee, 
-    tests 
+    tests, 
 )
 
 for file in files_to_convert:
