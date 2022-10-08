@@ -1,22 +1,21 @@
-def extract_func_names(directory_name, mission_name):
+def extract_func_names(directory_name: str, mission_name: str) -> tuple[str, str]:
 
-    referee_py = open(f"{directory_name}\\{mission_name}\\verification\\referee.py", 'r')
-    for line in referee_py.readlines():
-        if line.lstrip().startswith("\"python"):
-            func_name = line.split(":")[1].strip("\",")
-        elif line.lstrip().startswith("\"js"):
-            js_func_name = line.split(":")[1].strip("\",")
-            break
-    referee_py.close()
+    with open(f"{directory_name}\\{mission_name}\\verification\\referee.py", 'r') as referee_py:
+        for line in referee_py.readlines():
+            if line.lstrip().startswith("\"python"):
+                func_name = line.split(":")[1].strip("\",")
+            elif line.lstrip().startswith("\"js"):
+                js_func_name = line.split(":")[1].strip("\",")
+                break
 
     return func_name, js_func_name
 
-def next_api(directory_name, mission_name, py_iterable):
+def next_api(directory_name: str, mission_name: str, py_iterable: bool) -> None:
 
     func_name, js_func_name = extract_func_names(directory_name, mission_name)
 
-    try:
-        referee_py = open(f"{directory_name}\\{mission_name}\\verification\\referee.py", 'w')
+    with open(f"{directory_name}\\{mission_name}\\verification\\referee.py", 'w') as referee_py:
+
         referee_py.write(
 '''from checkio.signals import ON_CONNECT
 from checkio import api
@@ -41,9 +40,5 @@ api.add_listener(
             }
         }
     ).on_ready)\n''')
-    except:
-        print("\\verification\\referee.py - PROBLEM!")
-    else:
-        print("\\verification\\referee.py - OK")
-    finally:
-        referee_py.close()
+
+    print("\\verification\\referee.py - OK")

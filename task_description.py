@@ -2,37 +2,37 @@ import os
 
 
 # Функция для изменения строчек теста в такс-дискрипте на новую строку next-API
-def task_desc_change(path):  
-    task_description = open(f'{path}', mode='r', encoding='utf-8')
-    lines = task_description.readlines()
-    if_str = '<pre class="brush: {% if is_js %}javascript{% else %}python{% endif %}">{{init_code_tmpl}}</pre>\n'
-    #if if_str not in lines:
-    task_start = task_end = ex = 0
-    for ind, line in enumerate(lines):
-        if "Example" in line:
-            ex = ind
-                # Определяем границы искомого куска кода по "ключевым" меткам '{% if' и '{% endif'
-        elif ind > ex and '{% if interpreter.slug' in line:
-            task_start = ind
-        elif ind > task_start and '{% endif' in line:
-            task_end = ind
-        else:
-            line.replace("if interpreter.slug == \"js-node\"", "if is_js")
-    lines[task_start: task_end + 1] = if_str  # Заменяем ненужный кусок на актуальный код
+def task_desc_change(path: str) -> None:
 
-    task_description.close()
-    task_description = open(rf'{path}', mode='w', encoding='utf-8')
-    task_description.write(''.join(lines))  # Заново открытый файл перетираем корректным кодом
-    task_description.close()
+    with open(f'{path}', mode='r', encoding='utf-8') as task_description:
+        lines = task_description.readlines()
+        if_str = '<pre class="brush: {% if is_js %}javascript{% else %}python{% endif %}">{{init_code_tmpl}}</pre>\n'
+        #if if_str not in lines:
+        task_start = task_end = ex = 0
+        for ind, line in enumerate(lines):
+            if "Example" in line:
+                ex = ind
+            # Определяем границы искомого куска кода по "ключевым" меткам '{% if' и '{% endif'
+            elif ind > ex and '{% if interpreter.slug' in line:
+                task_start = ind
+            elif ind > task_start and '{% endif' in line:
+                task_end = ind
+            else:
+                line = line.replace("if interpreter.slug == \"js-node\"", "if is_js")
+        if task_start:
+            lines[task_start: task_end + 1] = if_str  # Заменяем ненужный кусок на актуальный код
+
+    with open(rf'{path}', mode='w', encoding='utf-8') as task_description: 
+        task_description.write(''.join(lines))  # Заново открытый файл перетираем корректным кодом
+
     index = path.find("\\translations")
     if index == -1:
         index = path.find("\\info")
     print(f'{path[index:]} - OK')
 
-def next_api(directory_name, mission_name):
+def next_api(directory_name: str, mission_name: str) -> None:
     
     # Парсинг файла task_description.html
-    # Используем библиотеку "os" и находим все файлы таск-дискрипта. Используя функцию task_desc_change, изменяем эти файлы
     for i in os.walk(f'{directory_name}\\{mission_name}'):
         if 'task_description.html' in i[2]:  # Находим по директориям где есть нужный нам файл
 #            for u in i[2]:
@@ -45,14 +45,13 @@ def next_api(directory_name, mission_name):
     if not os.path.exists(path_uk):
         os.makedirs(path_uk)
     if not os.path.exists(path_uk + "\\task_description.html"):
-        descr = open(f"{directory_name}\\{mission_name}\\info\\task_description.html", 'r')
-        descr_uk = open(path_uk + "\\task_description.html", 'w')
-        descr_uk.write(descr.read())
-        descr.close()
-        descr_uk.close()
+
+        with open(f"{directory_name}\\{mission_name}\\info\\task_description.html", 'r') as descr,\
+             open(path_uk + "\\task_description.html", 'w') as descr_uk:
+            descr_uk.write(descr.read())
+
     if not os.path.exists(path_uk + "\\task_short_description.html"):
-        descr = open(f"{directory_name}\\{mission_name}\\info\\task_short_description.html", 'r')
-        descr_uk = open(path_uk + "\\task_short_description.html", 'w')
-        descr_uk.write(descr.read())
-        descr.close()
-        descr_uk.close()
+
+        with open(f"{directory_name}\\{mission_name}\\info\\task_short_description.html", 'r') as descr,\
+             open(path_uk + "\\task_short_description.html", 'w') as descr_uk:
+            descr_uk.write(descr.read())

@@ -1,12 +1,12 @@
 import referee
 
 
-def next_api(directory_name, mission_name, py_iterable):
+def next_api(directory_name: str, mission_name: str, py_iterable: bool) -> None:
 
     func_name, _ = referee.extract_func_names(directory_name, mission_name)
 
-    python_3 = open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\python_3", 'r')
-    python_3_readLines = python_3.readlines()
+    with open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\python_3", 'r') as python_3:
+        python_3_readLines = python_3.readlines()
 
     imp_str = ''  # импортируемые библиотеки
     func_str = ''  # initial код функции
@@ -38,9 +38,9 @@ def next_api(directory_name, mission_name, py_iterable):
     example_str = ''.join(python_3_readLines[c: d + 1])
     example_str = example_str.rpartition("==")[0].strip()[7:]
     # Текст заполняемый в новый файл
-    python_3_tmpl = open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\python_3.tmpl", 'w')
+    with open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\python_3.tmpl", 'w') as python_3_tmpl:
        
-    python_3_tmpl.write(
+        python_3_tmpl.write(
 '''{% comment %}New initial code template{% endcomment %}
 {% block env %}''' + imp_str + '''{% endblock env %}
 
@@ -49,11 +49,13 @@ def next_api(directory_name, mission_name, py_iterable):
 '''{% endblock start %}
 
 {% block example %}''')
-    if func_str:
-        python_3_tmpl.write('''
+
+        if func_str:
+            python_3_tmpl.write('''
 print('Example:')
 print(''' + 'list('*py_iterable + example_str + ')'*py_iterable + ''')''')
-    python_3_tmpl.write('''
+
+        python_3_tmpl.write('''
 {% endblock %}
 
 {% block tests %}
@@ -64,8 +66,5 @@ assert {% block call %}''' + 'list('*py_iterable + func_name  + '''({{t.input|p_
 {% block final %}
 print("The mission is done! Click \'Check Solution\' to earn rewards!")
 {% endblock final %}''')
-
-    python_3_tmpl.close()
-    python_3.close()
     
     print("\\editor\\initial_code\\python_3.tmpl - OK")

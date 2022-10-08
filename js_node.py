@@ -2,27 +2,31 @@ import referee
 
 
 # Функция для обрезки экзампла в файле js_node.tmpl
-def example_cutter(exmpl):  
+def example_cutter(exmpl: str) -> str:  
 
-    s = ""
+    cache = ""
     for char in exmpl:
-        if char in "[{()}]":
-            s += char
-            if s[-2:] in ("[]", "()", "{}"):
-                s = s[:-2]
+        if char in '[({':
+            cache += char
+        elif char == '])}':
+            cache = cache[:-1]
+        #if char in "[{()}]":
+        #    cache += char
+        #    if cache[-2:] in ("[]", "()", "{}"):
+        #        cache = cache[:-2]
         elif char == ",":
-            exmpl = exmpl.replace(',', ('.', '*')[not s], 1)
+            exmpl = exmpl.replace(',', ('.', '*')[not cache], 1)
     exmpl = exmpl.replace('.', ',')
     
     return exmpl.split("*", 1)[0]
 
 
-def next_api(directory_name, mission_name, js_complex):
+def next_api(directory_name: str, mission_name: str, js_complex: bool) -> None:
 
     _, js_func_name = referee.extract_func_names(directory_name, mission_name)
 
-    js_node = open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\js_node", 'r')
-    js_node_readLines = js_node.readlines()
+    with open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\js_node", 'r') as js_node:
+        js_node_readLines = js_node.readlines()
 
     js_imp_str = ''  # импортируемые библиотеки
     js_func_str = ''  # initial код функции
@@ -49,10 +53,11 @@ def next_api(directory_name, mission_name, js_complex):
 
     
     js_func_str = ''.join(js_node_readLines[js_a: js_b])
-    # Так как со стройкой екзампла в джаве есть трудность (в большом количестве запятых еще до самого екзампла), реализовал обрезку функцией
-    js_example_str = example_cutter(js_ex[line.find('ual(')+4:])
-    js_node_tmpl = open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\js_node.tmpl", 'w')
-    js_node_tmpl.write(
+    js_example_str = example_cutter(js_ex[js_ex.find('ual(')+4:])
+
+    with open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\js_node.tmpl", 'w') as js_node_tmpl:
+        
+        js_node_tmpl.write(
 '''{% comment %}New initial code template{% endcomment %}
 {% block env %}import assert from "assert";'''+ js_imp_str[ : -1] +'''{% endblock env %}
 
@@ -61,11 +66,13 @@ def next_api(directory_name, mission_name, js_complex):
 '''{% endblock start %}
 
 {% block example %}''')
-    if js_func_str:
-        js_node_tmpl.write('''
+
+        if js_func_str:
+            js_node_tmpl.write('''
 console.log('Example:');
 console.log(''' + 'JSON.stringify('*js_complex + js_example_str + ')'*js_complex +''');''')
-    js_node_tmpl.write('''
+
+        js_node_tmpl.write('''
 {% endblock %}
 
 // These "asserts" are used for self-checking
@@ -77,8 +84,5 @@ assert.''' + ('deepS' if js_complex else 's') + '''trictEqual({% block call %}''
 {% block final %}
 console.log("Coding complete? Click \'Check Solution\' to earn rewards!");
 {% endblock final %}''')
-
-    js_node_tmpl.close()
-    js_node.close()
     
     print("\\editor\\initial_code\\js_node.tmpl - OK")
