@@ -6,10 +6,6 @@ def example_cutter(exmpl: str) -> str:
 
     cache = ""
     for char in exmpl:
-        # if char in '[({':
-        #     cache += char
-        # elif char == '])}':
-        #     cache = cache[:-1]
         if char in "[{()}]":
            cache += char
            if cache[-2:] in ("[]", "()", "{}"):

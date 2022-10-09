@@ -2,9 +2,9 @@ def extract_func_names(directory_name: str, mission_name: str) -> tuple[str, str
 
     with open(f"{directory_name}\\{mission_name}\\verification\\referee.py", 'r') as referee_py:
         for line in referee_py.readlines():
-            if line.lstrip().startswith("\"python"):
+            if (l:=line.lstrip()).startswith("\"python"):
                 func_name = line.split(":")[1].strip("\", \n")
-            elif line.lstrip().startswith("\"js"):
+            elif l.startswith("\"js"):
                 js_func_name = line.split(":")[1].strip("\", \n")
                 break
 

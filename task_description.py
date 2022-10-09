@@ -34,6 +34,7 @@ def next_api(directory_name: str, mission_name: str) -> None:
     
     # Парсинг файла task_description.html
     for i in os.walk(f'{directory_name}\\{mission_name}'):
+        print(i)
         if 'task_description.html' in i[2]:  # Находим по директориям где есть нужный нам файл
 #            for u in i[2]:
 #               if u == 'task_description.html':  # Берем нужный нам файл и крепим к директории
