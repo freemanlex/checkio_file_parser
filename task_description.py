@@ -33,18 +33,15 @@ def task_desc_change(path: str) -> None:
 def next_api(directory_name: str, mission_name: str) -> None:
     
     # Парсинг файла task_description.html
-    for i in os.walk(f'{directory_name}\\{mission_name}'):
-        print(i)
-        if 'task_description.html' in i[2]:  # Находим по директориям где есть нужный нам файл
-#            for u in i[2]:
-#               if u == 'task_description.html':  # Берем нужный нам файл и крепим к директории
-            path_info = i[0] + '\\' + 'task_description.html'
-            task_desc_change(path_info)  # Вызываем функцию передавая ей каждый раз новый путь для изменений
+    for parent, _, files in os.walk(f'{directory_name}\\{mission_name}'):
+        if 'task_description.html' in files:
+            task_desc_change(parent + '\\' + 'task_description.html')
 
     # create uk
     path_uk = f"{directory_name}\\{mission_name}\\translations\\uk\\info"
     if not os.path.exists(path_uk):
         os.makedirs(path_uk)
+        
     if not os.path.exists(path_uk + "\\task_description.html"):
 
         with open(f"{directory_name}\\{mission_name}\\info\\task_description.html", 'r') as descr,\

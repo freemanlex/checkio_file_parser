@@ -1,7 +1,51 @@
-import re, json
+import os
+
+
+# parsing function arguments
+def args_parse(directory_name: str, mission_name: str) -> dict:
+
+    file_path = f"{directory_name}\\{mission_name}\\editor\\initial_code\\python_3.tmpl"
+    if not os.path.exists(file_path):
+        file_path = f"{directory_name}\\{mission_name}\\editor\\initial_code\\python_3"
+
+    with open(file_path, 'r') as python_3:
+        python_3_readLines = python_3.readlines()
+
+    for line in python_3_readLines:
+        if line.startswith('def'):
+            init_string = line[line.index('(') + 1: line.index(')')]
+            break
+
+    # replacing commas inside typehints with '.', commas between args with '*'
+    cache = ''
+    for char in init_string:
+        if char == '[':
+            cache += char
+        elif char == ']':
+            cache = cache[:-1]
+        elif char == ',':
+            init_string = init_string.replace(',', ('.', '*')[not cache], 1)
+    # replacing '.' inside typehints back to ','
+    init_string = init_string.replace('.', ',')
+    # creating dict with name of args and if present - typehint and default value
+    final_dict = {}
+    for arg in map(str.strip, init_string.split('*')):
+        val = typehint = None
+        if '=' in arg:
+            arg, val = map(str.strip, arg.split('='))
+        if ':' in arg:
+            arg, typehint = map(str.strip, arg.split(':'))
+            if (ind:=typehint.find("[")) != -1:
+                typehint = typehint[:ind], typehint[ind + 1: -1]
+
+        final_dict[arg] = typehint, val
+
+    return final_dict
 
 
 def next_api(directory_name: str, mission_name: str) -> None:
+
+    print(args_parse(directory_name, mission_name))
 
     # changing output to list
     with open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'r') as test_py:
@@ -25,33 +69,3 @@ def next_api(directory_name: str, mission_name: str) -> None:
 
     with open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'w') as test_py:
         test_py.write("".join(test_py_readlines))
-#         if line.startswith("TESTS ="):
-#             tests_dict = eval(''.join(test_py_readlines[ind: ])[8: ])
-#             break
-#     test_py.close()
-
-#     for category in tests_dict.values():
-#         for dictionary in category:
-#             inp = dictionary['input']
-#             if type(inp) != list:
-#                 dictionary['input'] = [inp]
-
-#     tests_dict = json.dumps(tests_dict, indent=4)
-#     tests_dict = re.sub('\"input\": [\n[ ]{18}', '\"input\": [', tests_dict)
-#     tests_dict = re.sub('\n[ ]{12}]', ']', tests_dict)
-#     tests_dict = tests_dict.replace('true', 'True').replace('false', 'False')
-
-#     test_py = open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'w')
-#     test_py.write(
-# '''\"\"\"
-# TESTS is a dict with all you tests.
-# Keys for this will be categories' names.
-# Each test is dict with
-#     "input" -- input data for user function
-#     "answer" -- your right answer
-#     "explanation" -- not necessary key, it's using for additional info in animation.
-# \"\"\"
-
-# TESTS = ''' + tests_dict)
-#     test_py.close()
-#     print("\\verification\\tests.py - OK")
