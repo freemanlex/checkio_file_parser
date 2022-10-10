@@ -37,7 +37,6 @@ def args_parse(directory_name: str, mission_name: str) -> dict:
             arg, typehint = map(str.strip, arg.split(':'))
             if (ind:=typehint.find("[")) != -1:
                 typehint = typehint[:ind], typehint[ind + 1: -1]
-
         final_dict[arg] = typehint, val
 
     return final_dict
@@ -50,22 +49,23 @@ def next_api(directory_name: str, mission_name: str) -> None:
     # changing output to list
     with open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'r') as test_py:
         test_py_readlines = test_py.readlines()
-        for ind, line in enumerate(test_py_readlines):
-            #print(line)
-            if (l:=line.lstrip()).startswith("\"answer\":"):
-                end = ind
-                #print(end)
-            else:
-                if l.startswith("\"input\":"):
-                    start = ind
-                    #print(start)
-                continue
-            test = "".join(test_py_readlines[start: end]).strip()
-            title, out = test.split(":")
-            #print(out.strip(", \n"))
-            if type(eval(out.strip(", \n"))) != list:
-                out = '[' + out.strip(", \n") + ']\n'
-                test_py_readlines[start: end] = ": ".join([title, out])
+        
+    for ind, line in enumerate(test_py_readlines):
+        #print(line)
+        if (l:=line.lstrip()).startswith("\"answer\":"):
+            end = ind
+            #print(end)
+        else:
+            if l.startswith("\"input\":"):
+                start = ind
+                #print(start)
+            continue
+        test = "".join(test_py_readlines[start: end]).strip()
+        title, out = test.split(":")
+        #print(out.strip(", \n"))
+        if type(eval(out.strip(", \n"))) != list:
+            out = '[' + out.strip(", \n") + ']\n'
+            test_py_readlines[start: end] = ": ".join([title, out])
 
     with open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'w') as test_py:
         test_py.write("".join(test_py_readlines))
