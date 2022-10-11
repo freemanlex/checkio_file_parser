@@ -10,7 +10,6 @@ def task_desc_change(path: str) -> None:
         #if if_str not in lines:
         task_start = task_end = ex = 0
         for ind, line in enumerate(lines):
-            print(line)
             if "Example" in line:
                 ex = ind
             # Определяем границы искомого куска кода по "ключевым" меткам '{% if' и '{% endif'
