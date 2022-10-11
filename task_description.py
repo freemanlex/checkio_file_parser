@@ -8,6 +8,7 @@ def task_desc_change(path: str) -> None:
         lines = task_description.readlines()
 
     if_str = '<pre class="brush: {% if is_js %}javascript{% else %}python{% endif %}">{{init_code_tmpl}}</pre>\n'
+    ex = start = 0
     for ind, line in enumerate(lines):
         if "Example" in line:
             ex = ind
