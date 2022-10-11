@@ -14,12 +14,12 @@ py_iterable = True
 
 # commenting allows to migrate separate files
 files_to_convert = (
-    # init_js,
-    # python_3,
-    # js_node, 
+    init_js,
+    python_3,
+    js_node, 
     task_description, 
-    # referee, 
-    # tests, 
+    referee, 
+    tests, 
 )
 
 for file in files_to_convert:
