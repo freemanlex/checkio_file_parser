@@ -19,8 +19,6 @@ def task_desc_change(path: str) -> None:
             elif all([task_start, ind > task_start, '{% endif' in line]):
                 task_end = ind
             else:
-                print("else")
-                print(line.find("interpreter.slug == \"js-node\""))
                 lines[ind] = line.replace("interpreter.slug == \"js-node\"", "is_js")
         if task_start:
             lines[task_start: task_end + 1] = if_str  # Заменяем ненужный кусок на актуальный код
