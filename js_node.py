@@ -26,8 +26,7 @@ def next_api(directory_name: str, mission_name: str, js_complex: bool) -> None:
 
     js_imp_str = ''  # импортируемые библиотеки
     js_func_str = ''  # initial код функции
-    js_a = 0
-    js_b = 0  # Markers for 'def' search
+    js_a = js_b = 0 # Markers for 'def' search
     js_example_str = ''  # Строка, в которой будет храниться код console.log(func(...))
     js_count = False  # Переменная для поимки первого примера
     js_c = 0

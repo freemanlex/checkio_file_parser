@@ -1,9 +1,6 @@
 import referee
 
 
-
-
-
 def next_api(directory_name: str, mission_name: str, py_iterable: bool) -> None:
 
     func_name, _ = referee.extract_func_names(directory_name, mission_name)
@@ -13,19 +10,16 @@ def next_api(directory_name: str, mission_name: str, py_iterable: bool) -> None:
 
     imp_str = ''  # импортируемые библиотеки
     func_str = ''  # initial код функции
-    a = 0
-    b = 0  # Markers for 'def' search
+    a = b = 0 # Markers for 'def' search
     example_str = ''  # Строка, в которой будет храниться код print(func(...))
-    end = ''
-    c = 0
-    d = 0  # Markers for 'assert' search
+    c = d = 0 # Markers for 'assert' search
 
     for ind, line in enumerate(python_3_readLines):
         if line.startswith('from') or line.startswith('import'):
             imp_str += line.strip()  # Ищем по тексту импортированные библиотеки
         elif line.startswith('def'):
             a = ind
-            init_string = line[line.index('(') + 1: line.index(')')]
+            # init_string = line[line.index('(') + 1: line.index(')')]
         elif line.lstrip().startswith('return'):
             b = ind  # Конец initial кода функции
         elif line.lstrip().startswith('assert'):
