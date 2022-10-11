@@ -5,8 +5,8 @@ import os
 def args_parse(directory_name: str, mission_name: str) -> dict:
 
     file_path = f"{directory_name}\\{mission_name}\\editor\\initial_code\\python_3.tmpl"
-    if not os.path.exists(file_path):
-        file_path = f"{directory_name}\\{mission_name}\\editor\\initial_code\\python_3"
+    # if not os.path.exists(file_path):
+    #     file_path = f"{directory_name}\\{mission_name}\\editor\\initial_code\\python_3"
 
     with open(file_path, 'r') as python_3:
         python_3_readLines = python_3.readlines()
@@ -49,7 +49,7 @@ def next_api(directory_name: str, mission_name: str) -> None:
     # changing output to list
     with open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'r') as test_py:
         test_py_readlines = test_py.readlines()
-        
+
     for ind, line in enumerate(test_py_readlines):
         #print(line)
         if (l:=line.lstrip()).startswith("\"answer\":"):

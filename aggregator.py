@@ -3,11 +3,11 @@ import init_js, referee, tests, python_3, js_node, task_description
 
 
 # Directory path
-directory_name = 'C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub'
+directory_name = "C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub"
 if not os.path.exists(directory_name):
-    directory_name = 'C:\\Users\\o.zozula\\Documents\\GitHub'
+    directory_name = "C:\\Users\\o.zozula\\Documents\\GitHub"
 # Mission name
-mission_name = 'checkio-mission-frequency-sorting'
+mission_name = "checkio-mission-remove-all-after"
 # js modifier
 js_complex = True
 # py modifier
@@ -30,11 +30,9 @@ for file in files_to_convert:
     else:
         file.next_api(directory_name, mission_name)
 
-
 # old init files deleting
 for file in ("js_node", "python_3", "python_27"):
     try:
         os.remove(f"{directory_name}\\{mission_name}\\editor\\initial_code\\" + file)
     except:
         pass
-

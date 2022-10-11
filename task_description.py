@@ -10,15 +10,18 @@ def task_desc_change(path: str) -> None:
         #if if_str not in lines:
         task_start = task_end = ex = 0
         for ind, line in enumerate(lines):
+            print(line)
             if "Example" in line:
                 ex = ind
             # Определяем границы искомого куска кода по "ключевым" меткам '{% if' и '{% endif'
-            elif ind > ex and '{% if interpreter.slug' in line:
+            elif all([ex, ind > ex,'{% if interpreter.slug' in line]):
                 task_start = ind
-            elif ind > task_start and '{% endif' in line:
+            elif all([task_start, ind > task_start, '{% endif' in line]):
                 task_end = ind
             else:
-                line = line.replace("if interpreter.slug == \"js-node\"", "if is_js")
+                print("else")
+                print(line.find("interpreter.slug == \"js-node\""))
+                lines[ind] = line.replace("interpreter.slug == \"js-node\"", "is_js")
         if task_start:
             lines[task_start: task_end + 1] = if_str  # Заменяем ненужный кусок на актуальный код
 
