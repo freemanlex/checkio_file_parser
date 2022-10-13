@@ -7,16 +7,16 @@ def task_desc_change(path: str) -> None:
     with open(f'{path}', mode='r', encoding='utf-8') as task_description:
         lines = task_description.readlines()
 
-    if_str = '<pre class="brush: {% if is_js %}javascript{% else %}python{% endif %}">{{init_code_tmpl}}</pre>\n'
     ex = start = 0
     for ind, line in enumerate(lines):
-        if "Example: " in line:
-            lines[ind] = line.replace('Example: ', 'Examples:')
+        if "Example:" in line:
+            lines[ind] = line.replace('Example: ', 'Example:').\
+                              replace('Example:', 'Examples:')
             ex = ind
         elif all([ex, ind > ex,'{% if interpreter.slug' in line]):
             start = ind
         elif all([start, ind > start, '{% endif' in line]):
-            lines[start: ind + 1] = if_str
+            lines[start: ind + 1] = '<pre class="brush: {% if is_js %}javascript{% else %}python{% endif %}">{{init_code_tmpl}}</pre>\n'
         else:
             lines[ind] = line.replace('interpreter.slug == "js-node"', 'is_js').\
                               replace("Input: ", "Input:").\

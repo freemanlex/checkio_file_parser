@@ -6,7 +6,7 @@ import init_js, referee, tests, python_3, js_node, task_description
 if not os.path.exists((dir_name:="C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub")):
     dir_name = "C:\\Users\\o.zozula\\Documents\\GitHub"
 # Mission name
-mission_name = "checkio-mission-remove-all-after"
+mission_name = "checkio-mission-follow-instruction-move"
 # js modifier
 js_complex = True
 # py modifier
@@ -14,11 +14,11 @@ py_iterable = True
 
 # commenting allows to migrate separate files
 files_to_convert = (
-    init_js,
-    python_3,
-    js_node, 
+    #init_js,
+    #python_3,
+    #js_node, 
     task_description, 
-    referee, 
+    #referee, 
     tests, 
 )
 

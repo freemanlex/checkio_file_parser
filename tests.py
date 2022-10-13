@@ -44,7 +44,7 @@ def args_parse(directory_name: str, mission_name: str) -> dict:
 
 def next_api(directory_name: str, mission_name: str) -> None:
 
-    print(args_parse(directory_name, mission_name))
+    #print(args_parse(directory_name, mission_name))
 
     # changing output to list
     with open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'r') as test_py:
@@ -64,8 +64,8 @@ def next_api(directory_name: str, mission_name: str) -> None:
         title, out = test.split(":")
         #print(out.strip(", \n"))
         if type(eval(out.strip(", \n"))) != list:
-            out = '[' + out.strip(", \n") + ']\n'
-            test_py_readlines[start: end] = ": ".join([title, out])
+            out = '[' + out.strip(", \n") + '],\n'
+            test_py_readlines[start: end] = ' '*12 + ": ".join([title, out])
 
     with open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'w') as test_py:
         test_py.write("".join(test_py_readlines))
