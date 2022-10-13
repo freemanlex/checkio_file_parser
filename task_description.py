@@ -9,9 +9,7 @@ def task_desc_change(path: str) -> None:
 
     ex = start = 0
     for ind, line in enumerate(lines):
-        if "Example:" in line:
-            lines[ind] = line.replace('Example: ', 'Example:').\
-                              replace('Example:', 'Examples:')
+        if "for_info_only" in line:
             ex = ind
         elif all([ex, ind > ex,'{% if interpreter.slug' in line]):
             start = ind
@@ -20,7 +18,9 @@ def task_desc_change(path: str) -> None:
         else:
             lines[ind] = line.replace('interpreter.slug == "js-node"', 'is_js').\
                               replace("Input: ", "Input:").\
-                              replace("Output: ", "Output:")    
+                              replace("Output: ", "Output:").\
+                              replace('Example: ', 'Example:').\
+                              replace('Example:', 'Examples:')    
         
     with open(rf'{path}', mode='w', encoding='utf-8') as task_description: 
         task_description.write(''.join(lines))
