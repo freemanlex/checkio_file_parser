@@ -20,7 +20,8 @@ def task_desc_change(path: str) -> None:
                               replace("Input: ", "Input:").\
                               replace("Output: ", "Output:").\
                               replace('Example: ', 'Example:').\
-                              replace('Example:', 'Examples:')    
+                              replace('Example:', 'Examples:').\
+                              replace('How it is used: ', 'How it is used:')    
         
     with open(rf'{path}', mode='w', encoding='utf-8') as task_description: 
         task_description.write(''.join(lines))

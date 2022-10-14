@@ -52,20 +52,23 @@ def next_api(directory_name: str, mission_name: str) -> None:
 
     for ind, line in enumerate(test_py_readlines):
         #print(line)
-        if (l:=line.lstrip()).startswith("\"answer\":"):
+        if (l:=line.lstrip()).startswith('"input":'):
+            start = ind
+            #print(start)
+        elif l.startswith('"answer":'):
             end = ind
             #print(end)
-        else:
-            if l.startswith("\"input\":"):
-                start = ind
-                #print(start)
-            continue
-        test = "".join(test_py_readlines[start: end]).strip()
-        title, out = test.split(":")
-        #print(out.strip(", \n"))
-        if type(eval(out.strip(", \n"))) != list:
-            out = '[' + out.strip(", \n") + '],\n'
-            test_py_readlines[start: end] = ' '*12 + ": ".join([title, out])
+            test = "".join(test_py_readlines[start: end]).strip()
+            title, out = test.split(":", 1)
+            #print(out.strip(", \n"))
+            if type(eval(out.strip(", \n"))) != list:
+                out = '[' + out.strip(", \n") + '],\n'
+                test_py_readlines[start: end] = ' '*12 + ": ".join([title, out])
+        elif line.startswith(' '*8 + '}'):
+            if not test_py_readlines[ind-1].endswith(","):
+                test_py_readlines[ind-1] += ","
+            if not line.endswith(","):
+                test_py_readlines[ind] += ","
 
     with open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'w') as test_py:
         test_py.write("".join(test_py_readlines))
