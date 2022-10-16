@@ -6,7 +6,7 @@ import init_js, referee, tests, python_3, js_node, task_description
 if not os.path.exists((dir_name:="C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub")):
     dir_name = "C:\\Users\\o.zozula\\Documents\\GitHub"
 # Mission name
-mission_name = "checkio-mission-middle-characters"
+mission_name = "checkio-task-feed-pigeons"
 # js modifier
 js_complex = False
 # py modifier

@@ -64,11 +64,11 @@ def next_api(directory_name: str, mission_name: str) -> None:
             if type(eval(out.strip(", \n"))) != list:
                 out = '[' + out.strip(", \n") + '],\n'
                 test_py_readlines[start: end] = ' '*12 + ": ".join([title, out])
-        elif line.startswith(' '*8 + '}'):
-            if not test_py_readlines[ind-1].endswith(","):
-                test_py_readlines[ind-1] += ","
-            if not line.endswith(","):
-                test_py_readlines[ind] += ","
+        # elif line.startswith(' '*8 + '}'):
+        #     if not test_py_readlines[ind-1].endswith(",\n"):
+        #         test_py_readlines[ind-1] += ","
+        #     if not line.endswith(","):
+        #         test_py_readlines[ind] += ","
 
     with open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'w') as test_py:
         test_py.write("".join(test_py_readlines))
