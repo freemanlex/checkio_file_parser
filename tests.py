@@ -1,5 +1,5 @@
 import os
-
+from pathlib import Path
 
 # parsing function arguments
 def args_parse(directory_name: str, mission_name: str) -> dict:
@@ -70,5 +70,4 @@ def next_api(directory_name: str, mission_name: str) -> None:
         #     if not line.endswith(","):
         #         test_py_readlines[ind] += ","
 
-    with open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'w') as test_py:
-        test_py.write("".join(test_py_readlines))
+    Path(f"{directory_name}\\{mission_name}\\verification\\tests.py").write_text("".join(test_py_readlines))

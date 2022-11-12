@@ -1,3 +1,6 @@
+from pathlib import Path
+
+
 def next_api(directory_name: str, mission_name: str) -> None:
 
     with open(f"{directory_name}\\{mission_name}\\editor\\animation\\init.js", 'r') as init:
@@ -7,9 +10,7 @@ def next_api(directory_name: str, mission_name: str) -> None:
                 print("init.js has ANIMATION!!")
                 return
 
-    with open(f"{directory_name}\\{mission_name}\\editor\\animation\\init.js", 'w') as file:
-
-        file.write(
+    Path(f"{directory_name}\\{mission_name}\\editor\\animation\\init.js").write_text(
 '''requirejs(['ext_editor_io2', 'jquery_190'],
     function (extIO, $) {
         var io = new extIO({});

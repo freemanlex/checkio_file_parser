@@ -1,3 +1,6 @@
+from pathlib import Path
+
+
 def extract_func_names(directory_name: str, mission_name: str) -> tuple[str, str]:
 
     with open(f"{directory_name}\\{mission_name}\\verification\\referee.py", 'r') as referee_py:
@@ -16,9 +19,7 @@ def next_api(directory_name: str, mission_name: str, py_iterable: bool) -> None:
 
     func_name, js_func_name = extract_func_names(directory_name, mission_name)
 
-    with open(f"{directory_name}\\{mission_name}\\verification\\referee.py", 'w') as referee_py:
-
-        referee_py.write(
+    Path(f"{directory_name}\\{mission_name}\\verification\\referee.py").write_text(
 '''from checkio.signals import ON_CONNECT
 from checkio import api
 from checkio.referees.io_template import CheckiOReferee

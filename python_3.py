@@ -15,7 +15,7 @@ def next_api(directory_name: str, mission_name: str, py_iterable: bool) -> None:
     c = d = 0 # Markers for 'assert' search
 
     for ind, line in enumerate(python_3_readLines):
-        if line.startswith('from') or line.startswith('import'):
+        if line.startswith(('from', 'import')):
             imp_str += line.strip()  # Ищем по тексту импортированные библиотеки
         elif line.startswith('def'):
             a = ind
