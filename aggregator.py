@@ -6,7 +6,7 @@ import init_js, referee, tests, python_3, js_node, task_description
 if not os.path.exists((dir_name:="C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub")):
     dir_name = "C:\\Users\\o.zozula\\Documents\\GitHub"
 # Mission name
-mission_name = "checkio-mission-ryerson-letter-grade"
+mission_name = "checkio-mission-time-converter-24h-to-12h"
 # js modifier
 js_complex = False
 # py modifier
@@ -36,3 +36,54 @@ for file in ("js_node", "python_3", "python_27"):
         os.remove(f"{dir_name}\\{mission_name}\\editor\\initial_code\\" + file)
     except:
         pass
+
+if not os.path.exists(f"{dir_name}\\{mission_name}\\.gitignore"):
+    
+    with open(f"{dir_name}\\{mission_name}\\.gitignore", w) as gitignore:
+       gitignore.write(
+'''
+.vscode
+
+*.py[cod]
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+
+# Translations
+*.mo
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+.idea
+
+.DS_Store
+__VERSION__.py
+
+__pycache__
+'''
+       ) 
