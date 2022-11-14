@@ -6,7 +6,7 @@ import init_js, referee, tests, python_3, js_node, task_description
 if not os.path.exists((dir_name:="C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub")):
     dir_name = "C:\\Users\\o.zozula\\Documents\\GitHub"
 # Mission name
-mission_name = "checkio-mission-time-converter-24h-to-12h"
+mission_name = "checkio-mission-all-upper-v2"
 # js modifier
 js_complex = False
 # py modifier
@@ -38,11 +38,10 @@ for file in ("js_node", "python_3", "python_27"):
         pass
 
 if not os.path.exists(f"{dir_name}\\{mission_name}\\.gitignore"):
-    
-    with open(f"{dir_name}\\{mission_name}\\.gitignore", w) as gitignore:
+
+    with open(f"{dir_name}\\{mission_name}\\.gitignore", 'w') as gitignore:
        gitignore.write(
-'''
-.vscode
+'''.vscode
 
 *.py[cod]
 
