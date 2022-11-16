@@ -55,6 +55,7 @@ print(''' + 'list('*py_iterable + example_str + ')'*py_iterable + ''')''')
         python_3_tmpl.write('''
 {% endblock %}
 
+# These "asserts" are used for self-checking
 {% block tests %}
 {% for t in tests %}
 assert {% block call %}''' + 'list('*py_iterable + func_name  + '''({{t.input|p_args}})''' + ')'*py_iterable + '''{% endblock %} == {% block result %}{{t.answer|p}}{% endblock %}{% endfor %}
