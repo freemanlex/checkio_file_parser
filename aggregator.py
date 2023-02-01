@@ -1,12 +1,17 @@
 import os
-import init_js, referee, tests, python_3, js_node, task_description
+import init_js
+import referee
+import tests
+import python_3
+import js_node
+import task_description
 
 
 # Directory path
-if not os.path.exists((dir_name:="C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub")):
+if not os.path.exists((dir_name := "C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub")):
     dir_name = "C:\\Users\\o.zozula\\Documents\\GitHub"
 # Mission name
-mission_name = "checkio-mission-unix-match-2"
+mission_name = "checkio-task-sums-in-a-triangle"
 # js modifier
 js_complex = False
 # py modifier
@@ -16,10 +21,10 @@ py_iterable = False
 files_to_convert = (
     init_js,
     python_3,
-    js_node, 
-    task_description, 
-    referee, 
-    tests, 
+    js_node,
+    task_description,
+    referee,
+    # tests,
 )
 
 for file in files_to_convert:
@@ -40,8 +45,8 @@ for file in ("js_node", "python_3", "python_27"):
 if not os.path.exists(f"{dir_name}\\{mission_name}\\.gitignore"):
 
     with open(f"{dir_name}\\{mission_name}\\.gitignore", 'w') as gitignore:
-       gitignore.write(
-'''.vscode
+        gitignore.write(
+            '''.vscode
 
 *.py[cod]
 
@@ -85,4 +90,4 @@ __VERSION__.py
 
 __pycache__
 '''
-       ) 
+        )
