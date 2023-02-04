@@ -11,7 +11,7 @@ import task_description
 if not os.path.exists((dir_name := "C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub")):
     dir_name = "C:\\Users\\o.zozula\\Documents\\GitHub"
 # Mission name
-mission_name = "checkio-task-sums-in-a-triangle"
+mission_name = "checkio-mission-text-formatting"
 # js modifier
 js_complex = False
 # py modifier
@@ -24,7 +24,7 @@ files_to_convert = (
     js_node,
     task_description,
     referee,
-    # tests,
+    tests,
 )
 
 for file in files_to_convert:

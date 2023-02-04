@@ -7,15 +7,16 @@ def extract_func_names(directory_name: str, mission_name: str) -> tuple[str, str
         referee_lines = referee_py.readlines()
 
     for line in referee_lines:
-        if (l := line.lstrip()).startswith("\"python"):
-            func_name = line.split(":")[1].strip("\", \n")
-        elif l.startswith("function_name"):
-            func_name = line.split("=")[1].strip("\", \n")
-            js_func_name = "".join(map(str.capitalize, func_name.split("_")))
+        l = line.lstrip()
+        if l.startswith(("\"python", "\'python")):
+            func_name = line.split(":")[1].strip("\", \', \n")
+        elif l.startswith(("\"js", "\'js")):
+            js_func_name = line.split(":")[1].strip("\", \', \n")
             break
-        elif l.startswith("\"js"):
-            js_func_name = line.split(":")[1].strip("\", \n")
-            break
+        # elif l.startswith("function_name"):
+        #     func_name = line.split("=")[1].strip("\", \n")
+        #     js_func_name = "".join(map(str.capitalize, func_name.split("_")))
+        #     break
 
     return func_name, js_func_name
 
@@ -42,8 +43,8 @@ api.add_listener(
             "js": "''' + js_func_name + '''"
         },
         cover_code={
-            'python-3': {},
-            'js-node': {
+            "python-3": {},
+            "js-node": {
                 # "dateForZeros": True,
             }
         }
