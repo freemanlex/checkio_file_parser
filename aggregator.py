@@ -11,9 +11,9 @@ import task_description
 if not os.path.exists((dir_name := "C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub")):
     dir_name = "C:\\Users\\o.zozula\\Documents\\GitHub"
 # Mission name
-mission_name = "checkio-mission-text-formatting"
+mission_name = "checkio-task-cipher-crossword"
 # js modifier
-js_complex = False
+js_complex = True
 # py modifier
 py_iterable = False
 
@@ -40,7 +40,7 @@ for file in ("js_node", "python_3", "python_27"):
     try:
         os.remove(f"{dir_name}\\{mission_name}\\editor\\initial_code\\" + file)
     except:
-        pass
+        ...
 
 if not os.path.exists(f"{dir_name}\\{mission_name}\\.gitignore"):
 

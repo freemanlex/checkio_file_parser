@@ -3,6 +3,7 @@ from pathlib import Path
 
 def extract_func_names(directory_name: str, mission_name: str) -> tuple[str, str]:
 
+    func_name = js_func_name = ""
     with open(f"{directory_name}\\{mission_name}\\verification\\referee.py", 'r') as referee_py:
         referee_lines = referee_py.readlines()
 
@@ -13,10 +14,15 @@ def extract_func_names(directory_name: str, mission_name: str) -> tuple[str, str
         elif l.startswith(("\"js", "\'js")):
             js_func_name = line.split(":")[1].strip("\", \', \n")
             break
-        # elif l.startswith("function_name"):
-        #     func_name = line.split("=")[1].strip("\", \n")
-        #     js_func_name = "".join(map(str.capitalize, func_name.split("_")))
-        #     break
+
+    if not func_name:
+        for line in referee_lines:
+            if line.lstrip().startswith("function_name"):
+                func_name = line.split("=")[1].strip("\", \n")
+                break
+    if not js_func_name:
+        s = func_name.split("_")
+        js_func_name = s[0] + "".join(map(str.capitalize, s[1:]))
 
     return func_name, js_func_name
 

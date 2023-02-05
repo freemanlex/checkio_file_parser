@@ -53,6 +53,15 @@ def next_api(directory_name: str, mission_name: str, js_complex: bool) -> None:
         js_func_str = ''.join(js_node_readLines[js_a: js_b])
         js_example_str = example_cutter(js_ex[js_ex.find('ual(') + 4:])
 
+    else:
+        js_func_str =\
+            "function " + js_func_name + '''(): {
+    // your code here
+    return 0;
+}
+'''
+        js_example_str = js_func_name + "()"
+
     with open(f"{directory_name}\\{mission_name}\\editor\\initial_code\\js_node.tmpl", 'w') as js_node_tmpl:
 
         js_node_tmpl.write(
@@ -61,16 +70,11 @@ def next_api(directory_name: str, mission_name: str, js_complex: bool) -> None:
 
 {% block start %}
 ''' + js_func_str +
-            '''{% endblock start %}
+'''{% endblock start %}
 
-{% block example %}''')
-
-        if js_func_str:
-            js_node_tmpl.write('''
+{% block example %}
 console.log('Example:');
-console.log(''' + 'JSON.stringify(' * js_complex + js_example_str + ')' * js_complex + ''');''')
-
-        js_node_tmpl.write('''
+console.log(''' + 'JSON.stringify(' * js_complex + js_example_str + ')' * js_complex + ''');
 {% endblock %}
 
 // These "asserts" are used for self-checking

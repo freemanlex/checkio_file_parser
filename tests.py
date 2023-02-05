@@ -46,8 +46,8 @@ def args_parse(directory_name: str, mission_name: str) -> dict:
 
 def next_api(directory_name: str, mission_name: str) -> None:
 
-    #print(args_parse(directory_name, mission_name))
-
+    # print(args_parse(directory_name, mission_name))
+    changed = False
     # changing output to list
     with open(f"{directory_name}\\{mission_name}\\verification\\tests.py", 'r') as test_py:
         test_py_readlines = test_py.readlines()
@@ -62,8 +62,9 @@ def next_api(directory_name: str, mission_name: str) -> None:
             # print(end)
             test = "".join(test_py_readlines[start: end]).strip()
             title, out = test.split(":", 1)
-            #print(out.strip(", \n"))
+            # print(out.strip(", \n"))
             if type(eval(out.strip(", \n"))) != list:
+                changed = True
                 out = '[' + out.strip(", \n") + '],\n'
                 test_py_readlines[start: end] = ' ' * 12 + ": ".join([title, out])
         # elif line.startswith(' '*8 + '}'):
@@ -73,3 +74,5 @@ def next_api(directory_name: str, mission_name: str) -> None:
         #         test_py_readlines[ind] += ","
 
     Path(f"{directory_name}\\{mission_name}\\verification\\tests.py").write_text("".join(test_py_readlines))
+    if changed:
+        print("\\verification\\tests.py - OK")
