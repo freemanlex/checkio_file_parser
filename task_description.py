@@ -39,20 +39,20 @@ def next_api(dir_name: str, mission_name: str) -> None:
             task_desc_change(parent + '\\' + 'task_description.html')
 
     # create uk
-    if not os.path.exists((path_uk := f"{dir_name}\\{mission_name}\\translations\\uk\\info")):
-        os.makedirs(path_uk)
+    # if not os.path.exists((path_uk := f"{dir_name}\\{mission_name}\\translations\\uk\\info")):
+    #     os.makedirs(path_uk)
 
-    # if not os.path.exists(path_uk + "\\task_description.html"):
+    # # if not os.path.exists(path_uk + "\\task_description.html"):
 
-    #     with open(f"{dir_name}\\{mission_name}\\info\\task_description.html", 'r') as descr,\
-    #          open(path_uk + "\\task_description.html", 'w') as descr_uk:
+    # #     with open(f"{dir_name}\\{mission_name}\\info\\task_description.html", 'r') as descr,\
+    # #          open(path_uk + "\\task_description.html", 'w') as descr_uk:
+    # #         descr_uk.write(descr.read())
+
+    # if not os.path.exists(path_uk + "\\task_short_description.html"):
+
+    #     with open(f"{dir_name}\\{mission_name}\\info\\task_short_description.html", 'r') as descr,\
+    #             open(path_uk + "\\task_short_description.html", 'w') as descr_uk:
     #         descr_uk.write(descr.read())
 
-    if not os.path.exists(path_uk + "\\task_short_description.html"):
-
-        with open(f"{dir_name}\\{mission_name}\\info\\task_short_description.html", 'r') as descr,\
-                open(path_uk + "\\task_short_description.html", 'w') as descr_uk:
-            descr_uk.write(descr.read())
-
-    if not os.path.exists((path_uk_h := f"{dir_name}\\{mission_name}\\translations\\uk\\hints")):
-        os.makedirs(path_uk_h)
+    # if not os.path.exists((path_uk_h := f"{dir_name}\\{mission_name}\\translations\\uk\\hints")):
+    #     os.makedirs(path_uk_h)

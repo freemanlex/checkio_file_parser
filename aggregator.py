@@ -11,9 +11,9 @@ import task_description
 if not os.path.exists((dir_name := "C:\\Users\\ТЕХНОРАЙ\\Documents\\GitHub")):
     dir_name = "C:\\Users\\o.zozula\\Documents\\GitHub"
 # Mission name
-mission_name = "checkio-task-cipher-crossword"
+mission_name = "checkio-task-the-longest-palindromic"
 # js modifier
-js_complex = True
+js_complex = False
 # py modifier
 py_iterable = False
 
@@ -42,11 +42,9 @@ for file in ("js_node", "python_3", "python_27"):
     except:
         ...
 
-if not os.path.exists(f"{dir_name}\\{mission_name}\\.gitignore"):
-
-    with open(f"{dir_name}\\{mission_name}\\.gitignore", 'w') as gitignore:
-        gitignore.write(
-            '''.vscode
+with open(f"{dir_name}\\{mission_name}\\.gitignore", 'w') as gitignore:
+    gitignore.write(
+        '''.vscode
 
 *.py[cod]
 
